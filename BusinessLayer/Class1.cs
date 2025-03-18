@@ -1,8 +1,14 @@
 
 namespace BusinessLayer
 {
-    public class Class1
+    public class Tour
     {
+
+    }
+
+    public class TourLog
+    {
+
     }
 
 }
