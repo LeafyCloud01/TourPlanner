@@ -6,7 +6,21 @@
              xmlns:local="clr-namespace:PresentationLayer.Views"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-            
-    </Grid>
+    <TabControl>
+        <TabItem Header="Tour Info">
+            <local:TourInfoDisplay x:Name="DisplayTourInfo"></local:TourInfoDisplay>
+        </TabItem>
+        <TabItem Header="Route Info">
+            <local:RouteInfoDisplay x:Name="DisplayRouteInfo"></local:RouteInfoDisplay>
+        </TabItem>
+        <TabItem Header="Tour Logs">
+            <local:LogInfoDisplay x:Name="DisplayTourLogs"></local:LogInfoDisplay>
+        </TabItem>
+        <TabItem Header="Add Tour">
+            <local:TourInputs x:Name="TourInput"></local:TourInputs>
+        </TabItem>
+        <TabItem Header="Add Log">
+            <local:LogInputs x:Name="LogInput"></local:LogInputs>
+        </TabItem>
+    </TabControl>
 </UserControl>

@@ -1,0 +1,31 @@
+﻿<UserControl x:Class="PresentationLayer.Views.LogInputs"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:PresentationLayer.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <ScrollViewer>
+        <StackPanel>
+
+            <Label>Date/Time</Label>
+            <DatePicker></DatePicker>
+            <TextBox x:Name="LogTimeInput"></TextBox>
+            <Label>Comment</Label>
+            <TextBox x:Name="LogCommentInput"></TextBox>
+            <Label>Difficulty</Label>
+            <TextBox x:Name="LogDifficultyInput"></TextBox>
+            <Label>Total Distance</Label>
+            <TextBox x:Name="LogDistanceInput"></TextBox>
+            <Label>Total Time</Label>
+            <TextBox x:Name="LogTotalTimeInput"></TextBox>
+            <Label>Rating</Label>
+            <TextBox x:Name="LogRatingInput"></TextBox>
+
+
+            <Button x:Name="SubmitLog">Add Log</Button>
+
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>
