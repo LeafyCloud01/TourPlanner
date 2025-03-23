@@ -8,15 +8,15 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="0.5*"></ColumnDefinition>
-            <ColumnDefinition></ColumnDefinition>
-            <ColumnDefinition Width="2*"></ColumnDefinition>
+            <ColumnDefinition Width="*" MinWidth="150" MaxWidth="100"></ColumnDefinition>
+            <ColumnDefinition Width="*" MinWidth="150" MaxWidth="200"></ColumnDefinition>
+            <ColumnDefinition Width="*" MinWidth="150"></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition></RowDefinition>
         </Grid.RowDefinitions>
 
-        <StackPanel Grid.Column="0" MinWidth="100">
+        <StackPanel Grid.Column="0" HorizontalAlignment="Left">
             <TextBlock></TextBlock>
             <TextBlock Margin="5" FontWeight="Bold">Name:</TextBlock>
             <TextBlock Margin="5" FontWeight="Bold">From:</TextBlock>
@@ -27,7 +27,7 @@
             <TextBlock Margin="5" FontWeight="Bold">Popularity:</TextBlock>
             <TextBlock Margin="5" FontWeight="Bold">Child Friendliness:</TextBlock>
         </StackPanel>
-        <StackPanel Grid.Column="1" MinWidth="100">
+        <StackPanel Grid.Column="1" HorizontalAlignment="Left">
             <TextBlock></TextBlock>
             <TextBlock Text="{Binding Name}"></TextBlock>
             <TextBlock Text="{Binding From}"></TextBlock>
@@ -39,7 +39,7 @@
             <TextBlock Text="{Binding ChildFriendliness}"></TextBlock>
         </StackPanel>
 
-        <StackPanel Grid.Column="2" MinWidth="100">
+        <StackPanel Grid.Column="2">
             <TextBlock TextAlignment="Center" FontSize="16" FontWeight="Bold">Description</TextBlock>
             <TextBlock Text="{Binding Description}"></TextBlock>
         </StackPanel>

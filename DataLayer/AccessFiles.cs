@@ -1,9 +1,9 @@
 
 using System.IO;
 
-namespace DataLayer
+namespace DataAccessFiles
 {
-    public static class FileAccess
+    public static class AccessFiles
     {
         public static string directory = "Files/";
         public static string root = Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory).Parent.Parent.Parent.FullName;
@@ -15,6 +15,7 @@ namespace DataLayer
         public static void CreateFile(string FileName)
         {
             File.Create(GetFilePath(FileName));
+            if(FileName == "TestFile") { File.WriteAllText(GetFilePath(FileName), "This is a Test File"); }
         }
         public static void DeleteFile(string FileName)
         {
@@ -31,5 +32,4 @@ namespace DataLayer
             File.WriteAllText(GetFilePath(FileName), Content);
         }
     }
-
 }

@@ -12,7 +12,7 @@
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" MinWidth="150" MaxWidth="300"></ColumnDefinition>
-            <ColumnDefinition Width="2.5*"></ColumnDefinition>
+            <ColumnDefinition Width="2.5*" MinWidth="300"></ColumnDefinition>
         </Grid.ColumnDefinitions>
 
         <local1:AMDSelectionList x:Name="TourAMDSelectionList" Grid.Row="0" Grid.Column="0"/>

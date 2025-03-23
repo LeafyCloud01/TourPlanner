@@ -21,19 +21,19 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PresentationUnitTests", "..
 		{8F65342F-7BA0-4158-9950-84A0DC32481B} = {8F65342F-7BA0-4158-9950-84A0DC32481B}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAccessDatabase", "..\DataAccessDatabase\DataAccessDatabase.csproj", "{84377EA6-4342-4C7C-8590-3DC69019DBB7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAccessDatabase", "..\DataAccessDatabase\DataAccessDatabase.csproj", "{84377EA6-4342-4C7C-8590-3DC69019DBB7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BusinessUnitTests", "..\BusinessUnitTests\BusinessUnitTests.csproj", "{ADBBD02B-F931-4658-BDEF-9AC5C73E6EB8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BusinessUnitTests", "..\BusinessUnitTests\BusinessUnitTests.csproj", "{ADBBD02B-F931-4658-BDEF-9AC5C73E6EB8}"
 	ProjectSection(ProjectDependencies) = postProject
 		{6B389BA0-E579-4034-9D29-4625F17F5D47} = {6B389BA0-E579-4034-9D29-4625F17F5D47}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileAccessUnitTests", "..\FileAccessUnitTests\FileAccessUnitTests.csproj", "{43E9C01D-C0DD-4378-BF9A-954EC9B2C891}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FileAccessUnitTests", "..\FileAccessUnitTests\FileAccessUnitTests.csproj", "{43E9C01D-C0DD-4378-BF9A-954EC9B2C891}"
 	ProjectSection(ProjectDependencies) = postProject
 		{1EB29637-8E85-4B44-A67E-35FD43169E0E} = {1EB29637-8E85-4B44-A67E-35FD43169E0E}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DatabaseAccessUnitTests", "..\DatabaseAccessUnitTests\DatabaseAccessUnitTests.csproj", "{D7400C60-B9E1-427B-A74C-995A58B2A831}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DatabaseAccessUnitTests", "..\DatabaseAccessUnitTests\DatabaseAccessUnitTests.csproj", "{D7400C60-B9E1-427B-A74C-995A58B2A831}"
 	ProjectSection(ProjectDependencies) = postProject
 		{84377EA6-4342-4C7C-8590-3DC69019DBB7} = {84377EA6-4342-4C7C-8590-3DC69019DBB7}
 	EndProjectSection
