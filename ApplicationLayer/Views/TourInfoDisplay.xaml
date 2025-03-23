@@ -4,8 +4,12 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:PresentationLayer.Views"
+             xmlns:local1="clr-namespace:PresentationLayer.ViewModels"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.DataContext>
+        <local1:TourInfoDisplayViewModel/>
+    </UserControl.DataContext>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" MinWidth="150" MaxWidth="100"></ColumnDefinition>
@@ -29,19 +33,19 @@
         </StackPanel>
         <StackPanel Grid.Column="1" HorizontalAlignment="Left">
             <TextBlock></TextBlock>
-            <TextBlock Text="{Binding Name}"></TextBlock>
-            <TextBlock Text="{Binding From}"></TextBlock>
-            <TextBlock Text="{Binding To}"></TextBlock>
-            <TextBlock Text="{Binding TransportType}"></TextBlock>
-            <TextBlock Text="{Binding TourDistance}"></TextBlock>
-            <TextBlock Text="{Binding EstimatedTime}"></TextBlock>
-            <TextBlock Text="{Binding Popularity}"></TextBlock>
-            <TextBlock Text="{Binding ChildFriendliness}"></TextBlock>
+            <TextBlock Margin="5" Text="{Binding TourInfo.Name}"></TextBlock>
+            <TextBlock Margin="5" Text="{Binding TourInfo.From}"></TextBlock>
+            <TextBlock Margin="5" Text="{Binding TourInfo.To}"></TextBlock>
+            <TextBlock Margin="5" Text="{Binding TourInfo.TransportType}"></TextBlock>
+            <TextBlock Margin="5" Text="{Binding TourInfo.TourDistance}"></TextBlock>
+            <TextBlock Margin="5" Text="{Binding TourInfo.EstimatedTime}"></TextBlock>
+            <TextBlock Margin="5" Text="{Binding TourInfo.Popularity}"></TextBlock>
+            <TextBlock Margin="5" Text="{Binding TourInfo.ChildFriendliness}"></TextBlock>
         </StackPanel>
 
         <StackPanel Grid.Column="2">
             <TextBlock TextAlignment="Center" FontSize="16" FontWeight="Bold">Description</TextBlock>
-            <TextBlock Text="{Binding Description}"></TextBlock>
+            <TextBlock Text="{Binding TourInfo.Description}"></TextBlock>
         </StackPanel>
 
     </Grid>

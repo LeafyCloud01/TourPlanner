@@ -4,8 +4,13 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:PresentationLayer.Views"
+             xmlns:local1="clr-namespace:PresentationLayer.ViewModels"
              mc:Ignorable="d" 
              d:DesignHeight="30" d:DesignWidth="300">
+    <UserControl.DataContext>
+        <local1:SearchBoxViewModel/>
+    </UserControl.DataContext>
+    
     <Grid>
         <TextBox x:Name="SearchInput">Search</TextBox>
     </Grid>

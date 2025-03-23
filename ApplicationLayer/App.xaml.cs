@@ -16,12 +16,20 @@ namespace TourPlanner
             var tourSearchBox = new SearchBoxViewModel();
             var tourAMDControls = new AMDControlsViewModel();
             var tourSelectionList = new SelectionListViewModel();
-            var tourAMDSelectionList = new AMDSelectionListViewModel();
-            var tourDisplay = new TourDisplayViewModel();
+
+            var logAMDControls = new AMDControlsViewModel();
+            var logInfoDisplay = new LogInfoDisplayViewModel();
+            var tourInfoDisplay = new TourInfoDisplayViewModel();
+            var routeInfoDisplay = new RouteInfoDisplayViewModel();
+            var tourInputs = new TourInputsViewModel();
+            var logInputs = new LogInputsViewModel();
+
+            var tourAMDSelectionList = new AMDSelectionListViewModel(tourSearchBox, tourAMDControls, tourSelectionList);
+            var tourDisplay = new TourDisplayViewModel(tourInfoDisplay, routeInfoDisplay, tourInputs, logInfoDisplay, logInputs, logAMDControls);
 
             var window = new MainWindow
             {
-                DataContext = new MainViewModel(),
+                DataContext = new MainViewModel(tourAMDSelectionList, tourDisplay),
                 TourAMDSelectionList = { DataContext = tourAMDSelectionList }, 
                 DisplayTour = { DataContext = tourDisplay }
             };

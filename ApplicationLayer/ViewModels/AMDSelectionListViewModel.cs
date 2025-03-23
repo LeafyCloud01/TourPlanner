@@ -8,6 +8,13 @@ namespace PresentationLayer.ViewModels
 {
     public class AMDSelectionListViewModel
     {
-        public AMDSelectionListViewModel() { }
+        private readonly SearchBoxViewModel tourSearchBox;
+        private readonly AMDControlsViewModel tourAMDControls;
+        private readonly SelectionListViewModel tourSelectionList;
+
+        public AMDSelectionListViewModel(SearchBoxViewModel tourSearchBox, AMDControlsViewModel tourAMDControls, SelectionListViewModel tourSelectionList)
+        {
+
+        }
     }
 }

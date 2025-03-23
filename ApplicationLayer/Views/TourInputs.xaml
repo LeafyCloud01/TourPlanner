@@ -4,27 +4,31 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:PresentationLayer.Views"
+             xmlns:local1="clr-namespace:PresentationLayer.ViewModels"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.DataContext>
+        <local1:TourInputsViewModel/>
+    </UserControl.DataContext>
+    
     <ScrollViewer>
         <StackPanel>
 
             <Label>Tour Name</Label>
-            <TextBox x:Name="TourNameInput"></TextBox>
+            <TextBox x:Name="TourNameInput" Text="{Binding TourInfo.Name}"></TextBox>
             <Label>Description</Label>
-            <TextBox x:Name="TourDescriptionInput"></TextBox>
+            <TextBox x:Name="TourDescriptionInput" Text="{Binding TourInfo.Description}"></TextBox>
             <Label>From</Label>
-            <TextBox x:Name="TourFromInput"></TextBox>
+            <TextBox x:Name="TourFromInput" Text="{Binding TourInfo.From}"></TextBox>
             <Label>To</Label>
-            <TextBox x:Name="TourToInput"></TextBox>
+            <TextBox x:Name="TourToInput" Text="{Binding TourInfo.To}"></TextBox>
             <Label>Transport Type</Label>
-            <TextBox x:Name="TourTransportTypeInput"></TextBox>
+            <TextBox x:Name="TourTransportTypeInput" Text="{Binding TourInfo.TransportType}"></TextBox>
             <Label>Distance</Label>
             <Label>Estimated Time</Label>
             <Label>Route Information</Label>
-            
 
-            <Button x:Name="SubmitTour">Add Tour</Button>
+            <Button x:Name="SubmitTour" Command="{Binding ChangeTour}">Submit</Button>
 
         </StackPanel>
     </ScrollViewer>

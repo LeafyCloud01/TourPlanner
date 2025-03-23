@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BusinessLayer;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +9,7 @@ namespace PresentationLayer.ViewModels
 {
     public class LogInputsViewModel
     {
+        public TourLog LogInfo = new TourLog();
         public LogInputsViewModel() { }
     }
 }

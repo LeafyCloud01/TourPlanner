@@ -4,10 +4,15 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:PresentationLayer.Views"
+             xmlns:local1="clr-namespace:PresentationLayer.ViewModels"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.DataContext>
+        <local1:LogInfoDisplayViewModel/>
+    </UserControl.DataContext>
+    
     <Grid>
-        <DataGrid Name = "LogGrid" AlternatingRowBackground = "LightBlue" AlternationCount = "2" AutoGenerateColumns = "False">
+        <DataGrid Name = "LogGrid" AlternatingRowBackground = "LightBlue" AlternationCount = "2" AutoGenerateColumns = "False" ItemsSource="{Binding LogInfo}">
 
             <DataGrid.Columns>
                 <DataGridTextColumn Header = "Date" Binding = "{Binding Date}" />

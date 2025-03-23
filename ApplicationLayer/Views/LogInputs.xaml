@@ -4,8 +4,13 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:PresentationLayer.Views"
+             xmlns:local1="clr-namespace:PresentationLayer.ViewModels"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.DataContext>
+        <local1:LogInputsViewModel/>
+    </UserControl.DataContext>
+
     <ScrollViewer>
         <StackPanel>
 
@@ -13,15 +18,15 @@
             <DatePicker></DatePicker>
             <TextBox x:Name="LogTimeInput"></TextBox>
             <Label>Comment</Label>
-            <TextBox x:Name="LogCommentInput"></TextBox>
+            <TextBox x:Name="LogCommentInput" Text="{Binding LogInfo.Comment}"></TextBox>
             <Label>Difficulty</Label>
-            <TextBox x:Name="LogDifficultyInput"></TextBox>
+            <TextBox x:Name="LogDifficultyInput" Text="{Binding LogInfo.Difficulty}"></TextBox>
             <Label>Total Distance</Label>
-            <TextBox x:Name="LogDistanceInput"></TextBox>
+            <TextBox x:Name="LogDistanceInput" Text="{Binding LogInfo.TotalDistance}"></TextBox>
             <Label>Total Time</Label>
-            <TextBox x:Name="LogTotalTimeInput"></TextBox>
+            <TextBox x:Name="LogTotalTimeInput" Text="{Binding LogInfo.TotalTime}"></TextBox>
             <Label>Rating</Label>
-            <TextBox x:Name="LogRatingInput"></TextBox>
+            <TextBox x:Name="LogRatingInput" Text="{Binding LogInfo.Rating}"></TextBox>
 
 
             <Button x:Name="SubmitLog">Add Log</Button>

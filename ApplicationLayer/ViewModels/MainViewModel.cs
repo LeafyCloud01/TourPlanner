@@ -1,4 +1,6 @@
-﻿using System;
+﻿using BusinessLayer;
+using PresentationLayer.Views;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,19 +10,23 @@ namespace PresentationLayer.ViewModels
 {
     public class MainViewModel
     {
+        public TourList tourList = BusinessManager.GetTourList();
 
-        //public readonly ElementViewModel viewName;
+        private readonly AMDSelectionListViewModel tourAMDSelectionList;
+        private readonly TourDisplayViewModel tourDisplay;
 
-        public MainViewModel(/*ViewModels as Parameters*/)
+        public MainViewModel(AMDSelectionListViewModel tourAMDSelectionList, TourDisplayViewModel tourDisplay)
         {
+            if(tourList.tours.Count != 0) { tourDisplay.tour = tourList.tours[0]; }
 
-            //call necessary methods and event handlers
-            
-            //this.viewName = viewName
-
+            this.tourAMDSelectionList = tourAMDSelectionList;
+            this.tourDisplay = tourDisplay;
         }
 
-        // Add methods to handle information from sub-view models
+        private void ChangeTour(Tour tour)
+        {
+            tourList.ChangeTour(tour);
+        }
 
     }
 }
