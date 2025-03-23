@@ -15,15 +15,15 @@
         <StackPanel>
 
             <Label>Tour Name</Label>
-            <TextBox x:Name="TourNameInput" Text="{Binding TourInfo.Name}"></TextBox>
+            <TextBox x:Name="TourNameInput" Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
             <Label>Description</Label>
-            <TextBox x:Name="TourDescriptionInput" Text="{Binding TourInfo.Description}"></TextBox>
+            <TextBox x:Name="TourDescriptionInput" Text="{Binding Description, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
             <Label>From</Label>
-            <TextBox x:Name="TourFromInput" Text="{Binding TourInfo.From}"></TextBox>
+            <TextBox x:Name="TourFromInput" Text="{Binding From, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
             <Label>To</Label>
-            <TextBox x:Name="TourToInput" Text="{Binding TourInfo.To}"></TextBox>
+            <TextBox x:Name="TourToInput" Text="{Binding To, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
             <Label>Transport Type</Label>
-            <TextBox x:Name="TourTransportTypeInput" Text="{Binding TourInfo.TransportType}"></TextBox>
+            <TextBox x:Name="TourTransportTypeInput" Text="{Binding TransportType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
             <Label>Distance</Label>
             <Label>Estimated Time</Label>
             <Label>Route Information</Label>

@@ -10,65 +10,46 @@ using System.Xml.Linq;
 
 namespace PresentationLayer.ViewModels
 {
-    public class TourInputsViewModel
+    public class TourInputsViewModel : INotifyPropertyChanged
     {
-        public Tour TourInfo = new Tour();
-
-        /*public Tour _TourInfo = new Tour();
+        public static Tour _TourInfo = new Tour();
 
         public event PropertyChangedEventHandler? PropertyChanged;
-
-        public Tour TourInfo
-        {
-            get => _TourInfo;
-            set
-            {
-                _TourInfo = value;
-
-                // Support TwoWay binding
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TourInfo)));
-            }
-        }*/
 
         public event EventHandler<Tour> TourInputsChanged;
 
         public ICommand ChangeTour {  get; }
-
-        private string _name;
+        
         public string Name
         {
-            get => _name;
-            set { _name = value; }
+            get => _TourInfo.name;
+            set { _TourInfo.name = value; PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Name))); }
         }
 
-        private string _description;
         public string Description
         {
-            get => _description;
-            set { _description = value; }
+            get => _TourInfo.description;
+            set { _TourInfo.description = value; PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Description))); }
         }
 
-        private string _from;
         public string From
         {
-            get => _from;
-            set { _from = value; }
+            get => _TourInfo.from;
+            set { _TourInfo.from = value; PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(From))); }
         }
 
-        private string _to;
         public string To
         {
-            get => _to;
-            set { _to = value; }
+            get => _TourInfo.to;
+            set { _TourInfo.to = value; PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(To))); }
         }
 
-        private string _transportType;
-        public string TransportType
+        public Transport TransportType
         {
-            get => _transportType;
-            set { _transportType = value; }
+            get => _TourInfo.transportType;
+            set { _TourInfo.transportType = value; PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TransportType))); }
         }
-
+        
         public TourInputsViewModel()
         {
             /*
@@ -78,15 +59,16 @@ namespace PresentationLayer.ViewModels
             });
             */
         }
-
-        public void isEdit(Tour tour)
+        
+        public void isEdit()
         {
-            Name = tour.Name;
-            Description = tour.Description;
-            From = tour.From;
-            To = tour.To;
-            TransportType = tour.TransportType;
+            Name = _TourInfo.Name;
+            Description = _TourInfo.Description;
+            From = _TourInfo.From;
+            To = _TourInfo.To;
+            TransportType = _TourInfo.transportType;
         }
+        
     }
 
     public class ChangeTour

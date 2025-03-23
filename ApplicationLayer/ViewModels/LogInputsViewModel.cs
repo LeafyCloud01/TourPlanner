@@ -1,6 +1,8 @@
 ﻿using BusinessLayer;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,7 +11,21 @@ namespace PresentationLayer.ViewModels
 {
     public class LogInputsViewModel
     {
-        public TourLog LogInfo = new TourLog();
+        public TourLog _LogInfo = new TourLog();
+
+        public event PropertyChangedEventHandler? PropertyChanged;
+
+        public TourLog LogInfo
+        {
+            get => _LogInfo;
+            set
+            {
+                _LogInfo = value;
+
+                // Support TwoWay binding
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(LogInfo)));
+            }
+        }
         public LogInputsViewModel() { }
     }
 }
