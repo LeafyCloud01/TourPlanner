@@ -27,6 +27,5 @@ namespace PresentationLayer.ViewModels
         {
             tourList.ChangeTour(tour);
         }
-
     }
 }

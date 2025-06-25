@@ -29,7 +29,7 @@
             <TextBox x:Name="LogRatingInput" Text="{Binding LogInfo.rating}"></TextBox>
 
 
-            <Button x:Name="SubmitLog">Add Log</Button>
+            <Button x:Name="SubmitLog" Command="{Binding ChangeLog}">Add Log</Button>
 
         </StackPanel>
     </ScrollViewer>

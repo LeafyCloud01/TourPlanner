@@ -1,5 +1,6 @@
 
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Net;
 using System.Windows.Input;
 using System.Xml.Linq;
@@ -127,6 +128,33 @@ namespace BusinessLayer
 
             childFriendliness = 0; // add calculation using difficulty, timeAverage & tourDistance
         }
+
+        public bool includesMatch(string Search)
+        {
+            //standard search values
+            if(name.ToLower().Contains(Search.ToLower())) { return true; }
+            if(from.ToLower().Contains(Search.ToLower())) { return true; }
+            if(to.ToLower().Contains(Search.ToLower())) { return true; }
+            if (TransportType.ToLower().Contains(Search.ToLower())) { return true; }
+
+            // long text search values
+            if (description.ToLower().Contains(Search.ToLower())) { return true; }
+
+            // number search values
+            if (Search.Contains("" + tourDistance)) { return true; }
+            if (Search.Contains("" + estimatedTime.TimeSum())) { return true; }
+            if (Search.Contains("" + popularity)) { return true; }
+            if (Search.Contains("" + childFriendliness)) { return true; }
+
+            // log search values
+            for (int i = 0; i < logs.logs.Count; i++)
+            {
+                bool includes_match = logs.logs[i].includesMatch(Search);
+                if (includes_match) { return true; }
+            }
+
+            return false;
+        }
     }
 
     public class LogList
@@ -155,8 +183,16 @@ namespace BusinessLayer
                 logs.Add(log);
             }
         }
-        //public void CreateLog() { }
-        //public void ModifyLog() { }
+        /*
+        public void CreateLog(DateTime dateTime, string comment, float difficulty, float totalDistance, Time totalTime, float rating)
+        {
+            TourLog newLog = new TourLog(dateTime, comment, difficulty, totalDistance, totalTime, rating);
+            logs.Add(newLog);
+        }
+        public void ModifyLog(DateTime dateTime, string comment, float difficulty, float totalDistance, Time totalTime, float rating)
+        {
+            logs[i] = new TourLog(dateTime, comment, difficulty, totalDistance, totalTime, rating);
+        }*/
         public void DeleteLog(int i)
         {
             logs.RemoveAt(i);
@@ -231,6 +267,23 @@ namespace BusinessLayer
         public string TotalTime { get { return totalTime.TimeSum().ToString(); } }
         public float rating { get; set; }
         public float Rating { get { return rating; } }
+
+        public bool includesMatch(string Search)
+        {
+            //standard search values
+
+            // long text search values
+            if (comment.ToLower().Contains(Search.ToLower())) { return true; }
+
+            // number search values
+            if (Search.Contains("" + Date)) { return true; }
+            if (Search.Contains("" + totalTime.TimeSum())) { return true; }
+            if (Search.Contains("" + totalDistance)) { return true; }
+            if (Search.Contains("" + difficulty)) { return true; }
+            if (Search.Contains("" + rating)) { return true; }
+
+            return false;
+        }
     }
 
     public class Time

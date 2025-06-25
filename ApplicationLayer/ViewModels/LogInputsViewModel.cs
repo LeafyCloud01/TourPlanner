@@ -1,4 +1,5 @@
 ﻿using BusinessLayer;
+using GalaSoft.MvvmLight.Command;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -6,6 +7,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace PresentationLayer.ViewModels
 {
@@ -14,6 +16,8 @@ namespace PresentationLayer.ViewModels
         public TourLog _LogInfo = new TourLog();
 
         public event PropertyChangedEventHandler? PropertyChanged;
+
+        public ICommand ChangeLog {  get; internal set; }
 
         public TourLog LogInfo
         {
@@ -26,6 +30,15 @@ namespace PresentationLayer.ViewModels
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(LogInfo)));
             }
         }
-        public LogInputsViewModel() { }
+        public LogInputsViewModel() 
+        {
+            CreateChangeLog();
+        }
+
+        private void CreateChangeLog() { ChangeLog = new RelayCommand(ChangeLogExecute); }
+        public void ChangeLogExecute()
+        {
+
+        }
     }
 }

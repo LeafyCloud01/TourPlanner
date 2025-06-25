@@ -20,7 +20,7 @@
             <ColumnDefinition Width="*"></ColumnDefinition>
             <ColumnDefinition Width="*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        
+
         <Button Grid.Row="0" Grid.Column="0" Margin="5,5,5,5" Command="{Binding AddElement}" MinWidth="10" MinHeight="10">+</Button>
         <Button Grid.Row="0" Grid.Column="1" Margin="5,5,5,5" Command="{Binding DeleteElement}" MinWidth="10" MinHeight="10">-</Button>
         <Button Grid.Row="0" Grid.Column="2" Margin="5,5,5,5" Command="{Binding ModifyElement}" MinWidth="10" MinHeight="10">...</Button>

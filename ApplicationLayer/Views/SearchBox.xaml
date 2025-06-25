@@ -12,6 +12,6 @@
     </UserControl.DataContext>
     
     <Grid>
-        <TextBox x:Name="SearchInput">Search</TextBox>
+        <TextBox x:Name="SearchInput" Text="{Binding searchText}"></TextBox>
     </Grid>
 </UserControl>

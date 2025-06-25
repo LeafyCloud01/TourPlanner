@@ -1,4 +1,5 @@
 ﻿using BusinessLayer;
+using GalaSoft.MvvmLight.Command;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -18,7 +19,7 @@ namespace PresentationLayer.ViewModels
 
         public event EventHandler<Tour> TourInputsChanged;
 
-        public ICommand ChangeTour {  get; }
+        public ICommand ChangeTour { get; internal set; }
         
         public string Name
         {
@@ -52,14 +53,15 @@ namespace PresentationLayer.ViewModels
         
         public TourInputsViewModel()
         {
-            /*
-            ChangeTour = new ChangeTour((_) => 
-            { 
-                this.TourInputsChanged?.Invoke(this, Name);
-            });
-            */
+            CreateChangeTour();
         }
-        
+
+        private void CreateChangeTour() { ChangeTour = new RelayCommand(ChangeTourExecute); }
+        public void ChangeTourExecute() 
+        { 
+            // add functionality
+        }
+
         public void isEdit()
         {
             Name = _TourInfo.Name;
@@ -69,13 +71,5 @@ namespace PresentationLayer.ViewModels
             TransportType = _TourInfo.transportType;
         }
         
-    }
-
-    public class ChangeTour
-    {
-        public ChangeTour()
-        {
-
-        }
     }
 }

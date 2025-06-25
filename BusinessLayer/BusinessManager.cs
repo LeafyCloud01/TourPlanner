@@ -17,5 +17,22 @@ namespace BusinessLayer
 
             return (tourList != null)? tourList : new TourList();
         }
+
+        public static TourList GetTourList(string Search)
+        {
+            TourList matchingTours = new TourList(); matchingTours.tours = [];
+
+            if (Search == "") { return GetTourList(); }
+
+            TourList tours = GetTourList();
+
+            for(int i = 0; i < tours.tours.Count; i++)
+            {
+                bool includes_match = tours.tours[i].includesMatch(Search);
+                if (includes_match) { matchingTours.tours.Add(tours.tours[i]); }
+            }
+
+            return matchingTours;
+        }
     }
 }
