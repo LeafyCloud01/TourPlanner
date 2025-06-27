@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Net;
+using System.Text.Json.Serialization;
 using System.Windows.Input;
 using System.Xml.Linq;
 
@@ -17,7 +18,12 @@ namespace BusinessLayer
             tours.Add(new Tour());
         }
 
-        public List<Tour> tours;
+        public TourList(List<Tour> tours)
+        {
+            this.tours = tours;
+        }
+
+        public List<Tour> tours { get; set; }
 
         public void ChangeTour(Tour tour)
         {
@@ -35,19 +41,14 @@ namespace BusinessLayer
                 tours.Add(tour);
             }
         }
-        /*
-        public void CreateTour(string name, string description, string from, string to, Transport transportType, float tourDistance)
+        public void DeleteTour(Tour tour)
         {
-            Tour newTour = new Tour(name, description, from, to, transportType, tourDistance, new(), "", new());
-            tours.Add(newTour);
-        }
-        public void ModifyTour(int i, string name, string description, string from, string to, Transport transportType, float tourDistance)
-        {
-            tours[i] = new Tour(name, description, from, to, transportType, tourDistance, new(), "", new());
-        }*/
-        public void DeleteTour(int i)
-        {
-            tours.RemoveAt(i);
+            int exists = -1;
+            for (int i = 0; i < tours.Count; i++)
+            {
+                if (tours[i].Name == tour.Name) { exists = i; break; }
+            }
+            tours.RemoveAt(exists);
         }
 
         public ObservableCollection<Tour> GetTours()
@@ -94,28 +95,29 @@ namespace BusinessLayer
         }
 
         public string name { get; set; }
-        public string Name { get { return name; } }
         public string description { get; set; }
-        public string Description { get { return description; } }
         public string from { get; set; }
-        public string From { get { return from; } }
         public string to { get; set; }
-        public string To { get { return to; } }
         public Transport transportType { get; set; }
-        public string TransportType { get { return transportType.ToString(); } }
         public float tourDistance { get; set; }
-        public float TourDistance { get { return tourDistance; } }
         public Time estimatedTime { get; set; }
-        public Time EstimatedTime { get { return estimatedTime; } }
         public string routeInformation { get; set; }
-        public string RouteInformation { get { return routeInformation; } }
 
         public LogList logs;
 
         public int popularity = 0;
-        public int Popularity { get { return popularity; } }
         public float childFriendliness = 0;
-        public float ChildFriendliness { get { return childFriendliness; } }
+
+        [JsonIgnore] public string Name { get { return name; } }
+        [JsonIgnore] public string Description { get { return description; } }
+        [JsonIgnore] public string From { get { return from; } }
+        [JsonIgnore] public string To { get { return to; } }
+        [JsonIgnore] public string TransportType { get { return transportType.ToString(); } }
+        [JsonIgnore] public float TourDistance { get { return tourDistance; } }
+        [JsonIgnore] public Time EstimatedTime { get { return estimatedTime; } }
+        [JsonIgnore] public string RouteInformation { get { return routeInformation; } }
+        [JsonIgnore] public int Popularity { get { return popularity; } }
+        [JsonIgnore] public float ChildFriendliness { get { return childFriendliness; } }
 
         public void UpdatePopularity()
         {
@@ -165,7 +167,7 @@ namespace BusinessLayer
             logs.Add(new TourLog());
         }
 
-        public List<TourLog> logs;
+        public List<TourLog> logs { get; set; }
 
         public void ChangeLog(TourLog log)
         {
@@ -183,19 +185,14 @@ namespace BusinessLayer
                 logs.Add(log);
             }
         }
-        /*
-        public void CreateLog(DateTime dateTime, string comment, float difficulty, float totalDistance, Time totalTime, float rating)
+        public void DeleteLog(TourLog log)
         {
-            TourLog newLog = new TourLog(dateTime, comment, difficulty, totalDistance, totalTime, rating);
-            logs.Add(newLog);
-        }
-        public void ModifyLog(DateTime dateTime, string comment, float difficulty, float totalDistance, Time totalTime, float rating)
-        {
-            logs[i] = new TourLog(dateTime, comment, difficulty, totalDistance, totalTime, rating);
-        }*/
-        public void DeleteLog(int i)
-        {
-            logs.RemoveAt(i);
+            int exists = -1;
+            for (int i = 0; i < logs.Count; i++)
+            {
+                if (logs[i].dateTime == log.dateTime) { exists = i; break; }
+            }
+            if(exists != -1) { logs.RemoveAt(exists); }
         }
 
         public float CalculateAverageTimes() 
@@ -255,18 +252,20 @@ namespace BusinessLayer
         }
 
         public DateTime dateTime { get; set; }
-        public string Date { get { return dateTime.Date.ToString(); } }
-        public string Time { get { return dateTime.TimeOfDay.ToString(); } }
         public string comment { get; set; }
-        public string Comment { get { return comment; } }
         public float difficulty { get; set; }
-        public float Difficulty { get { return difficulty; } }
         public float totalDistance { get; set; }
-        public float TotalDistance { get { return totalDistance; } }
         public Time totalTime { get; set; }
-        public string TotalTime { get { return totalTime.TimeSum().ToString(); } }
         public float rating { get; set; }
-        public float Rating { get { return rating; } }
+        
+
+        [JsonIgnore] public string Date { get { return dateTime.Date.ToString(); } }
+        [JsonIgnore] public string Time { get { return dateTime.TimeOfDay.ToString(); } }
+        [JsonIgnore] public string Comment { get { return comment; } }
+        [JsonIgnore] public float Difficulty { get { return difficulty; } }
+        [JsonIgnore] public float TotalDistance { get { return totalDistance; } }
+        [JsonIgnore] public string TotalTime { get { return totalTime.TimeSum().ToString(); } }
+        [JsonIgnore] public float Rating { get { return rating; } }
 
         public bool includesMatch(string Search)
         {

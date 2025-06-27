@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace BusinessLayer
 {
@@ -12,7 +13,7 @@ namespace BusinessLayer
     {
         public static TourList GetTourList()
         {
-            string toursString = AccessFiles.GetFileContent("Tours");
+            string toursString = AccessFiles.GetFileContent("Tours.json"); 
             TourList? tourList = JsonSerializer.Deserialize<TourList>(toursString);
 
             return (tourList != null)? tourList : new TourList();
@@ -33,6 +34,19 @@ namespace BusinessLayer
             }
 
             return matchingTours;
+        }
+
+        public static void ChangeTour(Tour tour)
+        {
+            TourList tourList = GetTourList(); 
+            tourList.ChangeTour(tour); 
+            UpdateTourList(tourList);
+        }
+
+        private static void UpdateTourList(TourList tourList)
+        {
+            string toursString = JsonSerializer.Serialize<TourList>(tourList, new JsonSerializerOptions { WriteIndented = true });
+            AccessFiles.SetFileContent("Tours.json", toursString);
         }
     }
 }
