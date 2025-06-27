@@ -1,3 +1,24 @@
-﻿{
-  "tours": []
+{
+  "tours": [
+    {
+      "name": "A Test Tour",
+      "description": "A test description",
+      "from": "Aa",
+      "to": "Bb",
+      "transportType": 0,
+      "tourDistance": 0,
+      "estimatedTime": {},
+      "routeInformation": ""
+    },
+    {
+      "name": "A Tour",
+      "description": "A description",
+      "from": "A",
+      "to": "B",
+      "transportType": 0,
+      "tourDistance": 0,
+      "estimatedTime": {},
+      "routeInformation": ""
+    }
+  ]
 }

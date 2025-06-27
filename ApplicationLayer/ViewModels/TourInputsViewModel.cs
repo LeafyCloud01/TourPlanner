@@ -58,18 +58,8 @@ namespace PresentationLayer.ViewModels
 
         private void CreateChangeTour() { ChangeTour = new RelayCommand(ChangeTourExecute); }
         public void ChangeTourExecute() 
-        { 
-            // add functionality
-        }
-
-        public void isEdit()
         {
-            Name = _TourInfo.Name;
-            Description = _TourInfo.Description;
-            From = _TourInfo.From;
-            To = _TourInfo.To;
-            TransportType = _TourInfo.transportType;
+            BusinessManager.ChangeTour(_TourInfo);
         }
-        
     }
 }

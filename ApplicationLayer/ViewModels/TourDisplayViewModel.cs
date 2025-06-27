@@ -17,9 +17,15 @@ namespace PresentationLayer.ViewModels
         private readonly LogInfoDisplayViewModel logInfoDisplay;
         private readonly LogInputsViewModel logInputs;
         private readonly AMDControlsViewModel logAMDControls;
-        public TourDisplayViewModel(TourInfoDisplayViewModel tourInfoDisplay, RouteInfoDisplayViewModel routeInfoDisplay, TourInputsViewModel tourInputs, LogInfoDisplayViewModel logInfoDisplay, LogInputsViewModel logInputs, AMDControlsViewModel logAMDControls) 
+
+        public TourDisplayViewModel(TourInfoDisplayViewModel tourInfoDisplay, RouteInfoDisplayViewModel routeInfoDisplay, TourInputsViewModel tourInputs, LogInfoDisplayViewModel logInfoDisplay, LogInputsViewModel logInputs, AMDControlsViewModel logAMDControls)
         {
-            tourInfoDisplay.TourInfo = tour;
+            this.tourInfoDisplay = tourInfoDisplay;
+            this.routeInfoDisplay = routeInfoDisplay;
+            this.tourInputs = tourInputs;
+            this.logInfoDisplay = logInfoDisplay;
+            this.logInputs = logInputs;
+            this.logAMDControls = logAMDControls;
         }
     }
 }

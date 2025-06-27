@@ -17,8 +17,6 @@ namespace PresentationLayer.ViewModels
 
         public MainViewModel(AMDSelectionListViewModel tourAMDSelectionList, TourDisplayViewModel tourDisplay)
         {
-            if(tourList.tours.Count != 0) { tourDisplay.tour = tourList.tours[0]; }
-
             this.tourAMDSelectionList = tourAMDSelectionList;
             this.tourDisplay = tourDisplay;
         }
