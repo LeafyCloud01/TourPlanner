@@ -14,7 +14,9 @@ namespace PresentationLayer.ViewModels
 
         public AMDSelectionListViewModel(SearchBoxViewModel tourSearchBox, AMDControlsViewModel tourAMDControls, SelectionListViewModel tourSelectionList)
         {
-
+            this.tourSearchBox = tourSearchBox;
+            this.tourAMDControls = tourAMDControls;
+            this.tourSelectionList = tourSelectionList;
         }
     }
 }
