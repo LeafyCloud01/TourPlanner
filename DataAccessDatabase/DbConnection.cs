@@ -23,8 +23,14 @@ namespace DataAccessDatabase
         private string ReadConnectionInfo(string ConfigPath)
         {
             //config file access
-            string ReturnString = File.ReadAllText(ConfigPath);
-            return ReturnString;
+            foreach (string line in File.ReadLines(ConfigPath))
+            {
+                if (line.Contains("Database="))
+                {
+                    return line;
+                }
+            }
+            return "";
         }
 
         ~DbConnection() 
