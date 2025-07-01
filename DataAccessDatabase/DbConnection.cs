@@ -1,14 +1,15 @@
 using Npgsql;
+using System.IO;
 
 namespace DataAccessDatabase
 {
     public class DbConnection
     {
-        private string connectionInfo = "Host=http://127.0.0.1:5433;Database=tour_planner;Username=tour_server;Password=L9vCSjLsY07EAtwC;";
         public readonly NpgsqlDataSource? dataBase;
 
-        public DbConnection(/*string connectionInfo*/)
+        public DbConnection()
         {
+            string connectionInfo = ReadInfo();
             try
             {
                 dataBase = NpgsqlDataSource.Create(connectionInfo);
@@ -17,6 +18,18 @@ namespace DataAccessDatabase
             {
                 Console.WriteLine("NpgSqlException: {0}", e);
             }
+        }
+
+        private string ReadInfo()
+        {
+            //config file access
+            string ReturnString = File.ReadAllText(@"DatabaseConfig.txt");
+            return ReturnString;
+        }
+
+        ~DbConnection() 
+        {
+            dataBase!.Clear();
         }
     }
 
