@@ -7,9 +7,9 @@ namespace DataAccessDatabase
     {
         public readonly NpgsqlDataSource? dataBase;
 
-        public DbConnection()
+        public DbConnection(string ConfigPath)
         {
-            string connectionInfo = ReadInfo();
+            string connectionInfo = ReadConnectionInfo(ConfigPath);
             try
             {
                 dataBase = NpgsqlDataSource.Create(connectionInfo);
@@ -20,10 +20,10 @@ namespace DataAccessDatabase
             }
         }
 
-        private string ReadInfo()
+        private string ReadConnectionInfo(string ConfigPath)
         {
             //config file access
-            string ReturnString = File.ReadAllText(@"DatabaseConfig.txt");
+            string ReturnString = File.ReadAllText(ConfigPath);
             return ReturnString;
         }
 
