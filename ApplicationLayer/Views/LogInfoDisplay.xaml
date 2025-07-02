@@ -22,6 +22,27 @@
                 <DataGridTextColumn Header = "Total Time" Binding = "{Binding TotalTime}" />
                 <DataGridTextColumn Header = "Rating" Binding = "{Binding Rating}" />
                 <DataGridTextColumn Header = "Comment" Binding = "{Binding Comment}" />
+                <DataGridTemplateColumn>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button  Command="{Binding DataContext.AddLog, RelativeSource={RelativeSource AncestorType=DataGrid}}" CommandParameter="{Binding ID}">+</Button>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button  Command="{Binding DataContext.EditLog, RelativeSource={RelativeSource AncestorType=DataGrid}}" CommandParameter="{Binding ID}">...</Button>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button  Command="{Binding DataContext.DeleteLog, RelativeSource={RelativeSource AncestorType=DataGrid}}" CommandParameter="{Binding ID}">-</Button>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
     </Grid>

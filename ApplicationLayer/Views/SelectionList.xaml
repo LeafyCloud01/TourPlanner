@@ -19,7 +19,7 @@
         </ItemsControl.ItemsPanel>
         <ItemsControl.ItemTemplate>
             <DataTemplate>
-                <Button Content="{Binding Name}" Command="{Binding DataContext.ShowTour, RelativeSource={RelativeSource AncestorType=ItemsControl}}" CommandParameter="{Binding Name}"/>
+                <Button Content="{Binding name}" Command="{Binding DataContext.ShowTour, RelativeSource={RelativeSource AncestorType=ItemsControl}}" CommandParameter="{Binding ID}"/>
             </DataTemplate>
         </ItemsControl.ItemTemplate>
     </ItemsControl>

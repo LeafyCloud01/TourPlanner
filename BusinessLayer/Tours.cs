@@ -30,7 +30,7 @@ namespace BusinessLayer
             int exists = -1;
             for (int i = 0; i < tours.Count; i++)
             {
-                if (tours[i].Name == tour.Name) { exists = i; break; }
+                if (tours[i].ID == tour.ID) { exists = i; break; }
             }
             if(exists != -1)
             {
@@ -41,14 +41,23 @@ namespace BusinessLayer
                 tours.Add(tour);
             }
         }
-        public void DeleteTour(Tour tour)
+        public void DeleteTour(int tourID)
         {
             int exists = -1;
             for (int i = 0; i < tours.Count; i++)
             {
-                if (tours[i].Name == tour.Name) { exists = i; break; }
+                if (tours[i].ID == tourID) { exists = i; break; }
             }
             tours.RemoveAt(exists);
+        }
+
+        public Tour? getTour(int tourID)
+        {
+            for (int i = 0; i < tours.Count; i++)
+            {
+                if (tours[i].ID == tourID) { return tours[i]; }
+            }
+            return null;
         }
 
         public ObservableCollection<Tour> GetTours()
@@ -62,12 +71,35 @@ namespace BusinessLayer
 
             return tourDisplays;
         }
+
+        public void ChangeTourLog(int tourID, TourLog logInfo)
+        {
+            for (int i = 0; i < tours.Count; i++)
+            {
+                if (tours[i].ID == tourID)
+                {
+                    tours[i].logs.ChangeLog(logInfo);
+                }
+            }
+        }
+
+        public void DeleteTourLog(int tourID, int logID)
+        {
+            for (int i = 0; i < tours.Count; i++)
+            {
+                if (tours[i].ID == tourID)
+                {
+                    tours[i].logs.DeleteLog(logID);
+                }
+            }
+        }
     }
 
     public class Tour
     {
         public Tour()
         {
+            this.ID = -1;
             this.name = "A Tour";
             this.description = "A description";
             this.from = "A";
@@ -78,8 +110,9 @@ namespace BusinessLayer
             this.routeInformation = "";
             this.logs = new();
         }
-        public Tour(string name, string description, string from, string to, Transport transportType, float tourDistance, Time estimatedTime, string routeInformation, LogList logs)
+        public Tour(int ID, string name, string description, string from, string to, Transport transportType, float tourDistance, Time estimatedTime, string routeInformation, LogList logs)
         {
+            this.ID = ID;
             this.name = name;
             this.description = description;
             this.from = from;
@@ -94,6 +127,7 @@ namespace BusinessLayer
             UpdateChildFriendliness();
         }
 
+        public int ID { get; set; }
         public string name { get; set; }
         public string description { get; set; }
         public string from { get; set; }
@@ -174,7 +208,7 @@ namespace BusinessLayer
             int exists = -1;
             for (int i = 0; i < logs.Count; i++)
             {
-                if (logs[i].dateTime == log.dateTime) { exists = i; break; }
+                if (logs[i].ID == log.ID) { exists = i; break; }
             }
             if (exists != -1)
             {
@@ -185,12 +219,12 @@ namespace BusinessLayer
                 logs.Add(log);
             }
         }
-        public void DeleteLog(TourLog log)
+        public void DeleteLog(int logID)
         {
             int exists = -1;
             for (int i = 0; i < logs.Count; i++)
             {
-                if (logs[i].dateTime == log.dateTime) { exists = i; break; }
+                if (logs[i].ID == logID) { exists = i; break; }
             }
             if(exists != -1) { logs.RemoveAt(exists); }
         }
@@ -234,6 +268,7 @@ namespace BusinessLayer
     {
         public TourLog()
         {
+            this.ID = -1;
             this.dateTime = new();
             this.comment = "A comment";
             this.difficulty = 0;
@@ -241,8 +276,9 @@ namespace BusinessLayer
             this.totalTime = new();
             this.rating = 1;
         }
-        public TourLog(DateTime dateTime, string comment, float difficulty, float totalDistance, Time totalTime, float rating) 
+        public TourLog(int ID, DateTime dateTime, string comment, float difficulty, float totalDistance, Time totalTime, float rating) 
         { 
+            this.ID = ID;
             this.dateTime = dateTime;
             this.comment = comment;
             this.difficulty = difficulty;
@@ -251,6 +287,7 @@ namespace BusinessLayer
             this.rating = rating;
         }
 
+        public int ID {  get; set; }
         public DateTime dateTime { get; set; }
         public string comment { get; set; }
         public float difficulty { get; set; }

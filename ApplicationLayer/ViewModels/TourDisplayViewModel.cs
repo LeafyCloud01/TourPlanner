@@ -1,4 +1,5 @@
 ﻿using BusinessLayer;
+using GalaSoft.MvvmLight.Messaging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,16 +10,15 @@ namespace PresentationLayer.ViewModels
 {
     public class TourDisplayViewModel
     {
-        public Tour tour = new Tour();
-
         private readonly TourInfoDisplayViewModel tourInfoDisplay;
         private readonly RouteInfoDisplayViewModel routeInfoDisplay;
         private readonly TourInputsViewModel tourInputs;
         private readonly LogInfoDisplayViewModel logInfoDisplay;
         private readonly LogInputsViewModel logInputs;
         private readonly AMDControlsViewModel logAMDControls;
+        private readonly DeleteTourViewModel deleteTour;
 
-        public TourDisplayViewModel(TourInfoDisplayViewModel tourInfoDisplay, RouteInfoDisplayViewModel routeInfoDisplay, TourInputsViewModel tourInputs, LogInfoDisplayViewModel logInfoDisplay, LogInputsViewModel logInputs, AMDControlsViewModel logAMDControls)
+        public TourDisplayViewModel(TourInfoDisplayViewModel tourInfoDisplay, RouteInfoDisplayViewModel routeInfoDisplay, TourInputsViewModel tourInputs, LogInfoDisplayViewModel logInfoDisplay, LogInputsViewModel logInputs, AMDControlsViewModel logAMDControls, DeleteTourViewModel deleteTour)
         {
             this.tourInfoDisplay = tourInfoDisplay;
             this.routeInfoDisplay = routeInfoDisplay;
@@ -26,6 +26,7 @@ namespace PresentationLayer.ViewModels
             this.logInfoDisplay = logInfoDisplay;
             this.logInputs = logInputs;
             this.logAMDControls = logAMDControls;
+            this.deleteTour = deleteTour;
         }
     }
 }

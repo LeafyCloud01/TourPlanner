@@ -7,27 +7,30 @@
              xmlns:local1="clr-namespace:PresentationLayer.ViewModels"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <TabControl>
+    <TabControl x:Name="TourDisplayTabControl">
         <TabItem Header="Tour Info">
-            <local:TourInfoDisplay x:Name="DisplayTourInfo"></local:TourInfoDisplay>
+            <local:TourInfoDisplay></local:TourInfoDisplay>
         </TabItem>
         <TabItem Header="Route Info">
-            <local:RouteInfoDisplay x:Name="DisplayRouteInfo"></local:RouteInfoDisplay>
+            <local:RouteInfoDisplay></local:RouteInfoDisplay>
         </TabItem>
         <TabItem Header="Tour Logs">
-            <local:LogInfoDisplay x:Name="DisplayTourLogs"></local:LogInfoDisplay>
+            <local:LogInfoDisplay></local:LogInfoDisplay>
         </TabItem>
-        <TabItem Header="Add Tour">
-            <local:TourInputs x:Name="TourInput"></local:TourInputs>
+        <TabItem Header="Add Tour" Visibility="Collapsed">
+            <local:TourInputs></local:TourInputs>
         </TabItem>
         <TabItem Header="Edit Tour">
-            <local:TourInputs x:Name="TourEditInput"></local:TourInputs>
-        </TabItem>
-        <TabItem Header="Add Log">
-            <local:LogInputs x:Name="LogInput"></local:LogInputs>
+            <local:TourInputs></local:TourInputs>
         </TabItem>
         <TabItem Header="Delete Tour">
-            
+            <local:DeleteTour></local:DeleteTour>
+        </TabItem>
+        <TabItem Header="Add Log" Visibility="Collapsed">
+            <local:LogInputs></local:LogInputs>
+        </TabItem>
+        <TabItem Header="Edit Log" Visibility="Collapsed">
+            <local:LogInputs></local:LogInputs>
         </TabItem>
     </TabControl>
 </UserControl>

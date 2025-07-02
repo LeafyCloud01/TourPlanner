@@ -1,5 +1,6 @@
 ﻿using BusinessLayer;
 using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight.Messaging;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -15,12 +16,12 @@ namespace PresentationLayer.ViewModels
 {
     public class SelectionListViewModel : INotifyPropertyChanged
     {
-        public static TourList _TourList = new TourList();
+        public static TourList _TourList = BusinessManager.GetTourList();
         public ObservableCollection<Tour> _Tours = _TourList.GetTours();
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
-        public ICommand ShowTour {  get; internal set; }
+        public ICommand ShowTour {  get; set; }
 
         public ObservableCollection<Tour> Tours
         {
@@ -37,12 +38,22 @@ namespace PresentationLayer.ViewModels
         public SelectionListViewModel() 
         {
             CreateShowTour();
+
+            Messenger.Default.Register<TourList>(this, (action) => ReceiveCurrentTourList(action)); 
         }
 
-        private void CreateShowTour() { ShowTour = new RelayCommand<string>(ShowTourExecute); }
-        public void ShowTourExecute(string Param)
+        private void ReceiveCurrentTourList(TourList CurrentTours)
         {
-            MessageBox.Show(Param);
+            Tours = CurrentTours.GetTours();
+            Messenger.Default.Send<Tour>(CurrentTours.tours[0]);
+        }
+
+        private void CreateShowTour() { ShowTour = new RelayCommand<int>(ShowTourExecute); }
+        public void ShowTourExecute(int Param)
+        {
+            Messenger.Default.Send<Tour>(_TourList.getTour(Param));
+            Messenger.Default.Send<TourLog>(_TourList.getTour(Param).logs.logs[0]);
+            Messenger.Default.Send<string>("default_tabs");
         }
     }
 }
