@@ -15,7 +15,7 @@ namespace BusinessLayer
         public TourList()
         {
             tours = [];
-            tours.Add(new Tour());
+            //tours.Add(new Tour());
         }
 
         public TourList(List<Tour> tours)
@@ -127,7 +127,7 @@ namespace BusinessLayer
             this.routeInformation = "";
             this.logs = new();
         }
-        public Tour(int ID, string name, string description, string from, string to, Transport transportType, float tourDistance, Time estimatedTime, string routeInformation, LogList logs)
+        public Tour(int ID, string name, string description, string from, string to, Transport transportType, float tourDistance, DateTime estimatedTime, string routeInformation, LogList logs)
         {
             this.ID = ID;
             this.name = name;
@@ -151,7 +151,7 @@ namespace BusinessLayer
         public string to { get; set; }
         public Transport transportType { get; set; }
         public float tourDistance { get; set; }
-        public Time estimatedTime { get; set; }
+        public DateTime estimatedTime { get; set; }
         public string routeInformation { get; set; }
 
         public LogList logs;
@@ -211,7 +211,7 @@ namespace BusinessLayer
         public LogList()
         {
             logs = [];
-            logs.Add(new TourLog());
+            //logs.Add(new TourLog());
         }
 
         public List<TourLog> logs { get; set; }
@@ -294,14 +294,14 @@ namespace BusinessLayer
         public TourLog()
         {
             this.ID = -1;
-            this.dateTime = new();
+            this.dateTime = DateTime.Now;
             this.comment = "A comment";
             this.difficulty = 0;
             this.totalDistance = 0;
             this.totalTime = new();
             this.rating = 1;
         }
-        public TourLog(int ID, DateTime dateTime, string comment, float difficulty, float totalDistance, Time totalTime, float rating) 
+        public TourLog(int ID, DateTime dateTime, string comment, float difficulty, float totalDistance, DateTime totalTime, float rating) 
         { 
             this.ID = ID;
             this.dateTime = dateTime;
@@ -317,7 +317,7 @@ namespace BusinessLayer
         public string comment { get; set; }
         public float difficulty { get; set; }
         public float totalDistance { get; set; }
-        public Time totalTime { get; set; }
+        public DateTime totalTime { get; set; }
         public float rating { get; set; }
         
 

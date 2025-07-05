@@ -1,5 +1,11 @@
+using BusinessLayer;
+using log4net;
 using Npgsql;
+using System;
+using System.Collections.Generic;
+using System.Data;
 using System.IO;
+using System.Net;
 
 namespace DataAccessDatabase
 {
@@ -33,39 +39,161 @@ namespace DataAccessDatabase
             return "";
         }
 
-        public void GetToursLogs()
+        public TourList GetToursLogs()
         {
+            TourList AllTours = new TourList();
+            if (dataBase != null)
+            {
+                using var Connection = dataBase.OpenConnection();
+                using var Select = dataBase.CreateCommand("SELECT * FROM tours;");
+                using var Reader = Select.ExecuteReader();
 
+                if (Reader.HasRows)
+                {
+                    while (Reader.Read())
+                    {
+                        int id = (int)Reader.GetValue(0);
+                        var name = (Reader.GetString(1) == null) ? "" : Reader.GetString(1);
+                        var description = (Reader.GetString(2) == null) ? "" : Reader.GetString(2);
+                        var from = Reader.GetString(3);
+                        var to = Reader.GetString(4);
+                        var transport_type = (Reader.GetString(5) == null) ? "" : Reader.GetString(5);
+                        var distance = Reader.GetFloat(6);
+                        var time = Reader.GetDateTime(7);
+                        var information = (Reader.GetString(8) == null) ? "" : Reader.GetString(8);
+                        Transport transport;
+                        Enum.TryParse(transport_type, out transport);
+                        AllTours.ChangeTour(new Tour(id, name, description, from, to, transport, distance, time, information, new LogList()));
+                    }
+                    foreach (Tour t in AllTours.tours)
+                    {
+                        using var SelectLogs = dataBase.CreateCommand("SELECT * FROM logs WHERE tour_id = $1;");
+                        SelectLogs.Parameters.AddWithValue(NpgsqlTypes.NpgsqlDbType.Integer, t.ID);
+                        using var LogReader = SelectLogs.ExecuteReader();
+                        if (LogReader.HasRows)
+                        {
+                            while (LogReader.Read())
+                            {
+                                int id = (int)Reader.GetValue(0);
+                                var time = Reader.GetDateTime(1);
+                                var comment = (Reader.GetString(2) == null) ? "" : Reader.GetString(2);
+                                var difficulty = Reader.GetInt64(3);
+                                var distance = Reader.GetFloat(4);
+                                var to = Reader.GetString(4);
+                                var transport_type = (Reader.GetString(5) == null) ? "" : Reader.GetString(5);
+                                var total_time = Reader.GetDateTime(6);
+                                var rating = Reader.GetFloat(7);
+                                t.logs.ChangeLog(new TourLog(id, time, comment, difficulty, distance, total_time, rating));
+                            }
+                        }
+                    }
+
+                }
+                Connection.Close();
+            }
+            return AllTours;
         }
 
-        public void AddTour()
+        public void AddTour(Tour Tour)
         {
-
+            if (dataBase != null)
+            {
+                using var Connection = dataBase.OpenConnection();
+                using var Insert = dataBase.CreateCommand("INSERT INTO tours (name, description, from_coord, to_coord, transport_type, distance, time, information) VALUES ($1,$2,$3,$4,$5,$6,$7,$8);");
+                Insert.Parameters.AddWithValue(NpgsqlTypes.NpgsqlDbType.Varchar, Tour.name);
+                Insert.Parameters.AddWithValue(NpgsqlTypes.NpgsqlDbType.Varchar, Tour.description);
+                Insert.Parameters.AddWithValue(NpgsqlTypes.NpgsqlDbType.Varchar, Tour.from);
+                Insert.Parameters.AddWithValue(NpgsqlTypes.NpgsqlDbType.Varchar, Tour.to);
+                Insert.Parameters.AddWithValue(NpgsqlTypes.NpgsqlDbType.Varchar, Enum.GetName(typeof(Transport), Tour.transportType)!);
+                Insert.Parameters.AddWithValue(NpgsqlTypes.NpgsqlDbType.Real, Tour.tourDistance);
+                Insert.Parameters.AddWithValue(NpgsqlTypes.NpgsqlDbType.Time, Tour.estimatedTime);
+                Insert.Parameters.AddWithValue(NpgsqlTypes.NpgsqlDbType.Varchar, Tour.routeInformation);
+                Insert.ExecuteNonQuery();
+                Connection.Close();
+            }
         }
 
-        public void AddLog()
+        public void AddLog(int TourId, TourLog Log)
         {
-
+            if (dataBase != null)
+            {
+                using var Connection = dataBase.OpenConnection();
+                using var Insert = dataBase.CreateCommand("INSERT INTO logs (date_created, comment, difficulty, total_distance, total_time, rating, tour_id) VALUES ($1,$2,$3,$4,$5,$6,$7);");
+                Insert.Parameters.AddWithValue(NpgsqlTypes.NpgsqlDbType.Timestamp, Log.dateTime);
+                Insert.Parameters.AddWithValue(NpgsqlTypes.NpgsqlDbType.Varchar, Log.comment);
+                Insert.Parameters.AddWithValue(NpgsqlTypes.NpgsqlDbType.Integer, Log.difficulty);
+                Insert.Parameters.AddWithValue(NpgsqlTypes.NpgsqlDbType.Real, Log.totalDistance);
+                Insert.Parameters.AddWithValue(NpgsqlTypes.NpgsqlDbType.Time, Log.totalTime);
+                Insert.Parameters.AddWithValue(NpgsqlTypes.NpgsqlDbType.Real, Log.rating);
+                Insert.Parameters.AddWithValue(NpgsqlTypes.NpgsqlDbType.Integer, TourId);
+                Insert.ExecuteNonQuery();
+                Connection.Close();
+            }
         }
 
-        public void ModifyTour()
+        public void ModifyTour(Tour Tour)
         {
-
+            if (dataBase != null) 
+            {
+                using var Connection = dataBase.OpenConnection();
+                using var Update = dataBase.CreateCommand("UPDATE tours SET name = $1, description = $2, from_coord = $3, to_coord = $4, transport_type = $5, distance = $6, time = $7, information = $8 WHERE tour_id = $9;");
+                Update.Parameters.AddWithValue(NpgsqlTypes.NpgsqlDbType.Varchar, Tour.name);
+                Update.Parameters.AddWithValue(NpgsqlTypes.NpgsqlDbType.Varchar, Tour.description);
+                Update.Parameters.AddWithValue(NpgsqlTypes.NpgsqlDbType.Varchar, Tour.from);
+                Update.Parameters.AddWithValue(NpgsqlTypes.NpgsqlDbType.Varchar, Tour.to);
+                Update.Parameters.AddWithValue(NpgsqlTypes.NpgsqlDbType.Varchar, Enum.GetName(typeof(Transport), Tour.transportType)!);
+                Update.Parameters.AddWithValue(NpgsqlTypes.NpgsqlDbType.Real, Tour.tourDistance);
+                Update.Parameters.AddWithValue(NpgsqlTypes.NpgsqlDbType.Time, Tour.estimatedTime);
+                Update.Parameters.AddWithValue(NpgsqlTypes.NpgsqlDbType.Varchar, Tour.routeInformation);
+                Update.Parameters.AddWithValue(NpgsqlTypes.NpgsqlDbType.Integer, Tour.ID);
+                Update.ExecuteNonQuery();
+                Connection.Close();
+            }
         }
 
-        public void ModifyLog()
+        public void ModifyLog(TourLog Log)
         {
-
+            if (dataBase != null)
+            {
+                using var Connection = dataBase.OpenConnection();
+                using var Update = dataBase.CreateCommand("UPDATE logs SET date_created = $1, comment = $2, difficulty = $3, total_distance = $4, total_time = $5, rating = $6 WHERE log_id = $7;");
+                Update.Parameters.AddWithValue(NpgsqlTypes.NpgsqlDbType.Timestamp, Log.dateTime);
+                Update.Parameters.AddWithValue(NpgsqlTypes.NpgsqlDbType.Varchar, Log.comment);
+                Update.Parameters.AddWithValue(NpgsqlTypes.NpgsqlDbType.Integer, Log.difficulty);
+                Update.Parameters.AddWithValue(NpgsqlTypes.NpgsqlDbType.Real, Log.totalDistance);
+                Update.Parameters.AddWithValue(NpgsqlTypes.NpgsqlDbType.Time, Log.totalTime);
+                Update.Parameters.AddWithValue(NpgsqlTypes.NpgsqlDbType.Real, Log.rating);
+                Update.Parameters.AddWithValue(NpgsqlTypes.NpgsqlDbType.Integer,Log.ID);
+                Update.ExecuteNonQuery();
+                Connection.Close();
+            }
         }
 
-        public void DeleteTour()
+        public void DeleteTour(int TourId)
         {
-
+            if (dataBase != null)
+            {
+                using var Connection = dataBase.OpenConnection();
+                using var DeleteLogs = dataBase.CreateCommand("DELETE FROM logs WHERE tour_id = $1;");
+                DeleteLogs.Parameters.Add(TourId);
+                using var DeleteTour = dataBase.CreateCommand("DELETE FROM tours WHERE tour_id = $1;");
+                DeleteTour.Parameters.Add(TourId);
+                DeleteLogs.ExecuteNonQuery();
+                DeleteTour.ExecuteNonQuery();
+                Connection.Close();
+            }
         }
 
-        public void DeleteLog() 
-        { 
-        
+        public void DeleteLog(int LogId) 
+        {
+            if (dataBase != null)
+            {
+                using var Connection = dataBase.OpenConnection();
+                using var Delete = dataBase.CreateCommand("DELETE FROM logs WHERE log_id = $1;");
+                Delete.Parameters.Add(LogId);
+                Delete.ExecuteNonQuery();
+                Connection.Close();
+            }
         }
 
         ~DbConnection() 
