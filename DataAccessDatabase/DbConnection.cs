@@ -33,9 +33,37 @@ namespace DataAccessDatabase
             return "";
         }
 
+        public void GetTours()
+        {
+
+        }
+
+        public void AddTour()
+        {
+
+        }
+
+        public void AddLog()
+        {
+
+        }
+
+        public void ModifyTour()
+        {
+
+        }
+
+        public void DeleteTour()
+        {
+
+        }
+
         ~DbConnection() 
         {
-            dataBase!.Clear();
+            if (dataBase != null)
+            {
+                dataBase.Clear();
+            }
         }
     }
 
