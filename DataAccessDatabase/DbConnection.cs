@@ -33,7 +33,7 @@ namespace DataAccessDatabase
             return "";
         }
 
-        public void GetTours()
+        public void GetToursLogs()
         {
 
         }
@@ -53,9 +53,19 @@ namespace DataAccessDatabase
 
         }
 
+        public void ModifyLog()
+        {
+
+        }
+
         public void DeleteTour()
         {
 
+        }
+
+        public void DeleteLog() 
+        { 
+        
         }
 
         ~DbConnection() 
