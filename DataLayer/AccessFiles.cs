@@ -1,5 +1,7 @@
 
+using Microsoft.Win32;
 using System.IO;
+using System.Text.Json;
 using System.Windows;
 
 namespace DataAccessFiles
@@ -8,6 +10,11 @@ namespace DataAccessFiles
     {
         public static string directory = "/DataLayer/Files/";
         public static string root = Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory).Parent.Parent.Parent.Parent.FullName;
+
+        public static Dictionary<string, List<string>> fileFormats = new Dictionary<string, List<string>>
+        {
+            { "JSON", ["json", "JSON Files (*.json)|*.json|All Files (*.*)|*.*" ] }
+        };
 
         public static string GetFilePath(string FileName)
         {
@@ -30,6 +37,69 @@ namespace DataAccessFiles
         public static void SetFileContent(string FileName, string Content) 
         {
             File.WriteAllText(GetFilePath(FileName), Content);
+        }
+
+        public static T? Import<T>(string Format)
+        {
+            OpenFileDialog importDialog = new OpenFileDialog
+            {
+                Filter = fileFormats[Format][1],
+                Title = "Import tour from " + fileFormats[Format][0]
+            };
+
+            if (importDialog.ShowDialog() == true)
+            {
+                T? imported = default; 
+
+                switch (Format)
+                {
+                    case "JSON":
+                        string importJSON = File.ReadAllText(importDialog.FileName);
+                        imported = JsonSerializer.Deserialize<T>(importJSON);
+                    break;
+                }
+                    
+                    return imported;
+            }
+            return default;
+        }
+
+        public static bool Export<T>(string Format, T DataToExport)
+        {
+            SaveFileDialog exportDialog = new SaveFileDialog
+            {
+                Filter = fileFormats[Format][1],
+                Title = "Export tour as " + fileFormats[Format][0], 
+                OverwritePrompt = true
+            };
+
+            if (exportDialog.ShowDialog() == true)
+            {
+                switch (Format)
+                {
+                    case "JSON":
+                        string filePath = exportDialog.FileName;
+                        string exportJSON = JsonSerializer.Serialize<T>(DataToExport, new JsonSerializerOptions { WriteIndented = true });
+                        if(filePath != "") { File.WriteAllText(filePath, exportJSON); }
+                        else { return false; }
+                    break;
+                }
+
+                return true;
+            }
+            return false;
+        }
+
+        public static string getExportPath(string title)
+        {
+            SaveFileDialog exportDialog = new SaveFileDialog
+            {
+                Title = title,
+                OverwritePrompt = true
+            };
+
+            if (exportDialog.ShowDialog() == true) { return exportDialog.FileName; }
+            else { return ""; }
         }
     }
 }

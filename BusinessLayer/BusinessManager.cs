@@ -1,6 +1,8 @@
 ﻿using DataAccessFiles;
+using iText.Kernel.Pdf;
 using log4net;
 using log4net.Config;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -98,17 +100,56 @@ namespace BusinessLayer
 
         public static bool ExportTour(int currentTourID, string Format)
         {
-            return true;
+            Tour tourToExport = GetTourList().getTour(currentTourID);
+            if (tourToExport == null) 
+            { 
+                log.Error("Unable to export tour: tour ID not found in Tour List."); 
+                return false;
+            }
+            else
+            {
+                bool success = AccessFiles.Export<Tour>(Format, tourToExport);
+                
+                if(success == true) { log.Info("Successfully Imported JSON File"); }
+                else { log.Info("Unable to export JSON File. An error occured during Exporting."); }
+
+                return success;
+            } 
         }
 
-        public static bool ImportTour()
+        public static bool ImportTour(string Format)
         {
-            return true;
+            Tour? importedTour = AccessFiles.Import<Tour>(Format);
+            if(importedTour != null) 
+            { 
+                ChangeTour(importedTour);
+                log.Info("Successfully Imported JSON File");
+                return true;
+            }
+            else { 
+                log.Error("Error Importing JSON. Tour received is null.");
+                return false;
+            }
         }
 
-        public static bool GenerateReport(int currentTourID, string type)
+        public static bool GenerateReport(int CurrentTourID, string Type)
         {
-            return true;
+            string reportPath = "";
+
+            switch (Type)
+            {
+                case "tour_report":
+                    reportPath = AccessFiles.getExportPath("Generate Report");
+                    Tour reportedTour = GetTourList().getTour(CurrentTourID);
+                    return reportedTour.generateReport();
+
+                case "summarize_report":
+                    reportPath = AccessFiles.getExportPath("Generate Report");
+                    TourList tours = GetTourList();
+                    return tours.generateReport();
+            }
+
+            return false;
         }
     }
 }

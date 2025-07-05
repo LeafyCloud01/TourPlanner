@@ -1,6 +1,7 @@
 ﻿using BusinessLayer;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
+using Microsoft.Win32;
 using PresentationLayer.Views;
 using System;
 using System.Collections.Generic;
@@ -18,16 +19,17 @@ namespace PresentationLayer.ViewModels
 
         public ImportTourViewModel()
         {
-            CreateExportTour();
+            CreateImportTour();
         }
 
-        private void CreateExportTour() { ImportTour = new RelayCommand(ImportTourExecute); }
+        private void CreateImportTour() { ImportTour = new RelayCommand<string>(ImportTourExecute); }
 
-        private void ImportTourExecute()
+        private void ImportTourExecute(string Format)
         {
-            bool imported = BusinessManager.ImportTour();
+            bool imported = BusinessManager.ImportTour(Format);
             Messenger.Default.Send<TourList>(BusinessManager.GetTourList());
             if(imported) { MessageBox.Show("Tour Successfully Imported!"); }
+            else { MessageBox.Show("An error occurred importing tour from json"); }
         }
     }
 }

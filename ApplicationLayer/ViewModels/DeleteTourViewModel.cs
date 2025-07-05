@@ -18,7 +18,9 @@ namespace PresentationLayer.ViewModels
 
         public DeleteTourViewModel()
         {
-            CurrentTourID = BusinessManager.GetTourList().tours[0].ID;
+            TourList currentTours = BusinessManager.GetTourList();
+            CurrentTourID = (currentTours.tours.Count > 0) ? currentTours.tours[0].ID : -1;
+
             CreateDeleteTour();
             Messenger.Default.Register<Tour>(this, (action) => ReceiveCurrentTour(action));
         }

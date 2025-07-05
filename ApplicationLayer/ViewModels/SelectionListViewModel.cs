@@ -51,8 +51,11 @@ namespace PresentationLayer.ViewModels
         private void CreateShowTour() { ShowTour = new RelayCommand<int>(ShowTourExecute); }
         public void ShowTourExecute(int Param)
         {
-            Messenger.Default.Send<Tour>(_TourList.getTour(Param));
-            Messenger.Default.Send<TourLog>(_TourList.getTour(Param).logs.logs[0]);
+            Tour tourToSend = _TourList.getTour(Param);
+            TourLog logToSend = (tourToSend.logs.logs.Count > 0) ? tourToSend.logs.logs[0] : new TourLog();
+
+            Messenger.Default.Send<Tour>(tourToSend);
+            Messenger.Default.Send<TourLog>(logToSend);
             Messenger.Default.Send<string>("default_tabs");
         }
     }

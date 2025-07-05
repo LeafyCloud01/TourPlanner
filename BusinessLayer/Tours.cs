@@ -15,7 +15,6 @@ namespace BusinessLayer
         public TourList()
         {
             tours = [];
-            tours.Add(new Tour());
         }
 
         public TourList(List<Tour> tours)
@@ -110,6 +109,11 @@ namespace BusinessLayer
                 }
             }
         }
+
+        internal bool generateReport()
+        {
+            throw new NotImplementedException();
+        }
     }
 
     public class Tour
@@ -117,10 +121,10 @@ namespace BusinessLayer
         public Tour()
         {
             this.ID = -1;
-            this.name = "A Tour";
-            this.description = "A description";
-            this.from = "A";
-            this.to = "B";
+            this.name = "";
+            this.description = "";
+            this.from = "";
+            this.to = "";
             this.transportType = new();
             this.tourDistance = 0;
             this.estimatedTime = new();
@@ -204,6 +208,11 @@ namespace BusinessLayer
 
             return false;
         }
+
+        internal bool generateReport()
+        {
+            throw new NotImplementedException();
+        }
     }
 
     public class LogList
@@ -211,7 +220,6 @@ namespace BusinessLayer
         public LogList()
         {
             logs = [];
-            logs.Add(new TourLog());
         }
 
         public List<TourLog> logs { get; set; }
@@ -295,7 +303,7 @@ namespace BusinessLayer
         {
             this.ID = -1;
             this.dateTime = new();
-            this.comment = "A comment";
+            this.comment = "";
             this.difficulty = 0;
             this.totalDistance = 0;
             this.totalTime = new();

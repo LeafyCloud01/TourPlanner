@@ -14,7 +14,7 @@ namespace PresentationLayer.ViewModels
 {
     public class TourInputsViewModel : INotifyPropertyChanged
     {
-        public static Tour _TourInfo = BusinessManager.GetTourList().tours[0];
+        public static Tour _TourInfo = (BusinessManager.GetTourList().tours.Count > 0) ? BusinessManager.GetTourList().tours[0] : new Tour();
 
         public event PropertyChangedEventHandler? PropertyChanged;
 

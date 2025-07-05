@@ -20,7 +20,9 @@ namespace PresentationLayer.ViewModels
 
         public GenerateReportViewModel()
         {
-            CurrentTourID = BusinessManager.GetTourList().tours[0].ID;
+            TourList currentTours = BusinessManager.GetTourList();
+            CurrentTourID = (currentTours.tours.Count > 0) ? currentTours.tours[0].ID : -1;
+
             CreateGenerateReport();
             Messenger.Default.Register<Tour>(this, (action) => ReceiveCurrentTour(action));
         }
@@ -30,7 +32,7 @@ namespace PresentationLayer.ViewModels
         private void GenerateReportExecute(string Type)
         {
             bool report_created = BusinessManager.GenerateReport(CurrentTourID, Type);
-            if (report_created) { MessageBox.Show(Type + " Report Successfully Created!"); }
+            if (report_created) { MessageBox.Show("Report Successfully Created!"); }
         }
         private void ReceiveCurrentTour(Tour CurrentTour)
         {

@@ -21,6 +21,17 @@
       "tourDistance": 0,
       "estimatedTime": {},
       "routeInformation": ""
+    },
+    {
+      "ID": 2,
+      "name": "An Export and Import Test Tour",
+      "description": "A Tour to test importing and exporting",
+      "from": "I",
+      "to": "E",
+      "transportType": 0,
+      "tourDistance": 0,
+      "estimatedTime": {},
+      "routeInformation": ""
     }
   ]
 }

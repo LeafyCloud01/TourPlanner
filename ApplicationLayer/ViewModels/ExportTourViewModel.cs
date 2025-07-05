@@ -19,7 +19,9 @@ namespace PresentationLayer.ViewModels
 
         public ExportTourViewModel()
         {
-            CurrentTourID = BusinessManager.GetTourList().tours[0].ID;
+            TourList currentTours = BusinessManager.GetTourList();
+            CurrentTourID = (currentTours.tours.Count > 0) ? currentTours.tours[0].ID : -1;
+
             CreateExportTour();
             Messenger.Default.Register<Tour>(this, (action) => ReceiveCurrentTour(action));
         }
@@ -29,7 +31,8 @@ namespace PresentationLayer.ViewModels
         private void ExportTourExecute(string Format)
         {
             bool exported = BusinessManager.ExportTour(CurrentTourID, Format);
-            if(exported) { MessageBox.Show("Tour Successfully Exported!"); }
+            if(exported == true) { MessageBox.Show("Tour Successfully Exported!"); }
+            else if(exported == false) { MessageBox.Show("An error occurred exporting tour as json!"); }
         }
         private void ReceiveCurrentTour(Tour CurrentTour)
         {

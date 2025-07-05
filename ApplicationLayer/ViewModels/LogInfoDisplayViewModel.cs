@@ -17,7 +17,7 @@ namespace PresentationLayer.ViewModels
 {
     public class LogInfoDisplayViewModel : INotifyPropertyChanged
     {
-        public static LogList _Logs = BusinessManager.GetTourList().tours[0].logs;
+        public static LogList _Logs = (BusinessManager.GetTourList().tours.Count > 0) ? BusinessManager.GetTourList().tours[0].logs: new LogList();
         public ObservableCollection<TourLog> Logs = _Logs.GetLogs();
 
         public event PropertyChangedEventHandler? PropertyChanged;
