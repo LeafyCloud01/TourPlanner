@@ -53,12 +53,12 @@ namespace DataAccessDatabase
             return Tours;
         }
 
-        public static List<Log> GetLogs() 
+        public static List<Log> GetLogs(int TourId) 
         {
             List<Log> Logs;
             using (var context = new TourPlannerContext())
             {
-                Logs = context.Logs.ToList();
+                Logs = context.Logs.Where(l => l.TourNavigation.Equals(TourId)).ToList();
             }
             return Logs;
         }

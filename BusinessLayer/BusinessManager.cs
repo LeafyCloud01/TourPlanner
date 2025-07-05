@@ -1,6 +1,7 @@
 ﻿using DataAccessDatabase;
 using DataAccessFiles;
 using iText.Kernel.Pdf;
+using iText.StyledXmlParser.Jsoup.Nodes;
 using log4net;
 using log4net.Config;
 using Microsoft.Win32;
@@ -15,7 +16,9 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Media;
 using static iText.StyledXmlParser.Jsoup.Select.Evaluator;
+using static log4net.Appender.RollingFileAppender;
 
 namespace BusinessLayer
 {
@@ -38,9 +41,30 @@ namespace BusinessLayer
             var Tours = AccessDatabase.GetTours();
             foreach (var t in Tours) 
             {
-                tourList.ChangeTour(new BusinessLayer.Tour(t.TourId, t.Name, t.Description, t.FromCoord, t.ToCoord, Transport transportType, float tourDistance, DateTime estimatedTime, string routeInformation, LogList logs));
+                float distance = (t.Distance ==null)? 0 : (float)t.Distance;
+                TimeOnly duration = (t.Duration == null) ? new TimeOnly() : (TimeOnly)t.Duration;
+                string name = (t.Name == null) ? "" : t.Name;
+                string description = (t.Description == null) ? "" : t.Description;
+                string information = (t.Information == null) ? "" : t.Information;
+                Transport transport;
+                Enum.TryParse(t.TransportType, out transport);
+                tourList.ChangeTour(new BusinessLayer.Tour(t.TourId, name, description, t.FromCoord, t.ToCoord, transport, distance, duration, information, new LogList()));
             }
-            return null;
+            foreach (var tour in tourList.tours)
+            {
+                if (tour != null)
+                {
+                    var Logs = AccessDatabase.GetLogs(tour.ID);
+                    foreach (var l in Logs) 
+                    {
+                        TimeOnly totaltime = (l.TotalTime == null) ? new TimeOnly() : (TimeOnly)l.TotalTime;
+                        int rating = (l.Rating == null) ? 0 : (int)l.Rating;
+                        string comment = (l.Comment == null) ? "" : l.Comment;
+                        tour.logs.ChangeLog(new TourLog(l.LogId, l.DateCreated, comment, l.Difficulty, l.TotalDistance, totaltime, rating));    
+                    }
+                }
+            }
+            return tourList;
         }
 
         public static TourList GetTourList(string Search)
