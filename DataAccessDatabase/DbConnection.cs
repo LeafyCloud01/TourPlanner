@@ -99,7 +99,7 @@ namespace DataAccessDatabase
             if (dataBase != null)
             {
                 using var Connection = dataBase.OpenConnection();
-                using var Insert = dataBase.CreateCommand("INSERT INTO tours (name, description, from_coord, to_coord, transport_type, distance, time, information) VALUES ($1,$2,$3,$4,$5,$6,$7,$8);");
+                using var Insert = dataBase.CreateCommand("INSERT INTO tours (name, description, from_coord, to_coord, transport_type, distance, duration, information) VALUES ($1,$2,$3,$4,$5,$6,$7,$8);");
                 Insert.Parameters.AddWithValue(NpgsqlTypes.NpgsqlDbType.Varchar, Tour.name);
                 Insert.Parameters.AddWithValue(NpgsqlTypes.NpgsqlDbType.Varchar, Tour.description);
                 Insert.Parameters.AddWithValue(NpgsqlTypes.NpgsqlDbType.Varchar, Tour.from);
@@ -136,7 +136,7 @@ namespace DataAccessDatabase
             if (dataBase != null) 
             {
                 using var Connection = dataBase.OpenConnection();
-                using var Update = dataBase.CreateCommand("UPDATE tours SET name = $1, description = $2, from_coord = $3, to_coord = $4, transport_type = $5, distance = $6, time = $7, information = $8 WHERE tour_id = $9;");
+                using var Update = dataBase.CreateCommand("UPDATE tours SET name = $1, description = $2, from_coord = $3, to_coord = $4, transport_type = $5, distance = $6, duration = $7, information = $8 WHERE tour_id = $9;");
                 Update.Parameters.AddWithValue(NpgsqlTypes.NpgsqlDbType.Varchar, Tour.name);
                 Update.Parameters.AddWithValue(NpgsqlTypes.NpgsqlDbType.Varchar, Tour.description);
                 Update.Parameters.AddWithValue(NpgsqlTypes.NpgsqlDbType.Varchar, Tour.from);
