@@ -42,34 +42,58 @@ namespace BusinessLayer
             string toursString = JsonSerializer.Serialize<TourList>(tourList, new JsonSerializerOptions { WriteIndented = true });
             AccessFiles.SetFileContent("Tours.json", toursString);
         }
+        private static void UpdateTourList_DeleteTour(int tourID)
+        {
+            
+        }
+        private static void UpdateTourList_ChangeTour(bool exists, Tour tour)
+        {
+            
+        }
+        private static void UpdateTourList_DeleteLog(int tourID, int logID)
+        {
+            
+        }
+        private static void UpdateTourList_ChangeLog(bool exists, int tourID, TourLog log)
+        {
+
+        }
 
         public static void ChangeTour(Tour tour)
         {
             log.Info("Changing Tour: " + tour.ID);
             TourList tourList = GetTourList(); 
-            tourList.ChangeTour(tour); 
+            bool exists = tourList.ChangeTour(tour); 
+            
             UpdateTourList(tourList);
+            UpdateTourList_ChangeTour(exists, tour);
         }
         public static void DeleteTour(int tourID)
         {
             log.Info("Deleting Tour: " + tourID);
             TourList tourList = GetTourList();
             tourList.DeleteTour(tourID);
+            
             UpdateTourList(tourList);
+            UpdateTourList_DeleteTour(tourID);
         }
         public static void ChangeLog(int tourID, TourLog logInfo)
         {
             log.Info("Changing Log: " + logInfo.ID);
             TourList tourList = GetTourList();
-            tourList.ChangeTourLog(tourID, logInfo);
+            bool exists = tourList.ChangeTourLog(tourID, logInfo);
+            
             UpdateTourList(tourList);
+            UpdateTourList_ChangeLog(exists, tourID, logInfo);
         }
         public static void DeleteLog(int tourID, int logID)
         {
             log.Info("Deleting Log: " + logID);
             TourList tourList = GetTourList();
             tourList.DeleteTourLog(tourID, logID);
+            
             UpdateTourList(tourList);
+            UpdateTourList_DeleteLog(tourID, logID);
         }
 
         public static bool ExportTour(int currentTourID, string Format)
