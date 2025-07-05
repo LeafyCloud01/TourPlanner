@@ -17,8 +17,11 @@ namespace PresentationLayer.ViewModels
         private readonly LogInputsViewModel logInputs;
         private readonly AMDControlsViewModel logAMDControls;
         private readonly DeleteTourViewModel deleteTour;
+        private readonly ImportTourViewModel importTour;
+        private readonly ExportTourViewModel exportTour;
+        private readonly GenerateReportViewModel generateReport;
 
-        public TourDisplayViewModel(TourInfoDisplayViewModel tourInfoDisplay, RouteInfoDisplayViewModel routeInfoDisplay, TourInputsViewModel tourInputs, LogInfoDisplayViewModel logInfoDisplay, LogInputsViewModel logInputs, AMDControlsViewModel logAMDControls, DeleteTourViewModel deleteTour)
+        public TourDisplayViewModel(TourInfoDisplayViewModel tourInfoDisplay, RouteInfoDisplayViewModel routeInfoDisplay, TourInputsViewModel tourInputs, LogInfoDisplayViewModel logInfoDisplay, LogInputsViewModel logInputs, AMDControlsViewModel logAMDControls, DeleteTourViewModel deleteTour, ImportTourViewModel importTour, ExportTourViewModel exportTour, GenerateReportViewModel generateReport)
         {
             this.tourInfoDisplay = tourInfoDisplay;
             this.routeInfoDisplay = routeInfoDisplay;
@@ -27,6 +30,9 @@ namespace PresentationLayer.ViewModels
             this.logInputs = logInputs;
             this.logAMDControls = logAMDControls;
             this.deleteTour = deleteTour;
+            this.importTour = importTour;
+            this.exportTour = exportTour;
+            this.generateReport = generateReport;
         }
     }
 }

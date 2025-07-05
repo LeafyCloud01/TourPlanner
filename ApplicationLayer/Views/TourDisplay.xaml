@@ -32,5 +32,14 @@
         <TabItem Header="Edit Log" Visibility="Collapsed">
             <local:LogInputs></local:LogInputs>
         </TabItem>
+        <TabItem Header="Import">
+            <local:ImportTour></local:ImportTour>
+        </TabItem>
+        <TabItem Header="Export">
+            <local:ExportTour></local:ExportTour>
+        </TabItem>
+        <TabItem Header="Generate Report">
+            <local:GenerateReport></local:GenerateReport>
+        </TabItem>
     </TabControl>
 </UserControl>

@@ -33,11 +33,7 @@ namespace BusinessLayer
 
             TourList tours = GetTourList();
 
-            for(int i = 0; i < tours.tours.Count; i++)
-            {
-                bool includes_match = tours.tours[i].includesMatch(Search);
-                if (includes_match) { matchingTours.tours.Add(tours.tours[i]); }
-            }
+            tours.getTours(Search);
 
             return matchingTours;
         }
@@ -74,6 +70,21 @@ namespace BusinessLayer
             TourList tourList = GetTourList();
             tourList.DeleteTourLog(tourID, logID);
             UpdateTourList(tourList);
+        }
+
+        public static bool ExportTour(int currentTourID, string Format)
+        {
+            return true;
+        }
+
+        public static bool ImportTour()
+        {
+            return true;
+        }
+
+        public static bool GenerateReport(int currentTourID, string type)
+        {
+            return true;
         }
     }
 }

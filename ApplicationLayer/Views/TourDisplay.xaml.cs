@@ -39,11 +39,11 @@ namespace PresentationLayer.Views
         {
             // First tab header in list is the one that will be focused on
             {"add_tour", ["Add Tour"] },
-            {"add_log", ["Add Log", "Tour Info", "Route Info", "Tour Logs", "Edit Tour", "Delete Tour"] },
-            {"edit_log", ["Edit Log", "Tour Info", "Route Info", "Tour Logs", "Edit Tour", "Delete Tour"] },
-            {"delete_log", ["Delete Log", "Tour Info", "Route Info", "Tour Logs", "Edit Tour", "Delete Tour"] },
-            {"log_list", ["Tour Logs", "Tour Info", "Route Info", "Edit Tour", "Delete Tour"] },
-            {"default_tabs", ["Tour Info", "Route Info", "Tour Logs", "Edit Tour", "Delete Tour"] }
+            {"add_log", ["Add Log", "Tour Info", "Route Info", "Tour Logs", "Edit Tour", "Delete Tour", "Import", "Export", "Generate Report"] },
+            {"edit_log", ["Edit Log", "Tour Info", "Route Info", "Tour Logs", "Edit Tour", "Delete Tour", "Import", "Export", "Generate Report"] },
+            {"delete_log", ["Delete Log", "Tour Info", "Route Info", "Tour Logs", "Edit Tour", "Delete Tour", "Import", "Export", "Generate Report"] },
+            {"log_list", ["Tour Logs", "Tour Info", "Route Info", "Edit Tour", "Delete Tour", "Import", "Export", "Generate Report"] },
+            {"default_tabs", ["Tour Info", "Route Info", "Tour Logs", "Edit Tour", "Delete Tour", "Import", "Export", "Generate Report"] }
         };
 
         private void hideAllTabs()

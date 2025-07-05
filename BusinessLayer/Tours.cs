@@ -25,7 +25,7 @@ namespace BusinessLayer
 
         public List<Tour> tours { get; set; }
 
-        public void ChangeTour(Tour tour)
+        public bool ChangeTour(Tour tour)
         {
             int exists = -1;
             for (int i = 0; i < tours.Count; i++)
@@ -35,10 +35,12 @@ namespace BusinessLayer
             if(exists != -1)
             {
                 tours[exists] = tour;
+                return true;
             }
             else
             {
                 tours.Add(tour);
+                return false;
             }
         }
         public void DeleteTour(int tourID)
@@ -60,6 +62,17 @@ namespace BusinessLayer
             return null;
         }
 
+        public void getTours(string SearchText)
+        {
+            List<Tour> matchingTours = [];
+            for (int i = 0; i < tours.Count; i++)
+            {
+                bool includes_match = tours[i].includesMatch(SearchText);
+                if (includes_match) { matchingTours.Add(tours[i]); }
+            }
+            tours = matchingTours;
+        }
+
         public ObservableCollection<Tour> GetTours()
         {
             var tourDisplays = new ObservableCollection<Tour>();
@@ -72,15 +85,19 @@ namespace BusinessLayer
             return tourDisplays;
         }
 
-        public void ChangeTourLog(int tourID, TourLog logInfo)
+        public bool ChangeTourLog(int tourID, TourLog logInfo)
         {
+            bool isEdit = false;
             for (int i = 0; i < tours.Count; i++)
             {
                 if (tours[i].ID == tourID)
                 {
-                    tours[i].logs.ChangeLog(logInfo);
+                    isEdit = tours[i].logs.ChangeLog(logInfo);
+                    tours[i].UpdatePopularity();
+                    tours[i].UpdateChildFriendliness();
                 }
             }
+            return isEdit;
         }
 
         public void DeleteTourLog(int tourID, int logID)
@@ -183,11 +200,7 @@ namespace BusinessLayer
             if (Search.Contains("" + childFriendliness)) { return true; }
 
             // log search values
-            for (int i = 0; i < logs.logs.Count; i++)
-            {
-                bool includes_match = logs.logs[i].includesMatch(Search);
-                if (includes_match) { return true; }
-            }
+            if (logs.includesMatch("Search")) { return true; }
 
             return false;
         }
@@ -203,7 +216,7 @@ namespace BusinessLayer
 
         public List<TourLog> logs { get; set; }
 
-        public void ChangeLog(TourLog log)
+        public bool ChangeLog(TourLog log)
         {
             int exists = -1;
             for (int i = 0; i < logs.Count; i++)
@@ -213,10 +226,12 @@ namespace BusinessLayer
             if (exists != -1)
             {
                 logs[exists] = log;
+                return true;
             }
             else
             {
                 logs.Add(log);
+                return false;
             }
         }
         public void DeleteLog(int logID)
@@ -249,7 +264,7 @@ namespace BusinessLayer
                 difficulty += logs[i].difficulty;
             }
 
-            return difficulty;
+            return difficulty/logs.Count;
         }
 
         public ObservableCollection<TourLog> GetLogs()
@@ -262,6 +277,16 @@ namespace BusinessLayer
             }
 
             return logDisplays;
+        }
+
+        public bool includesMatch(string SearchText)
+        {
+            for (int i = 0; i < logs.Count; i++)
+            {
+                bool includes_match = logs[i].includesMatch(SearchText);
+                if (includes_match) { return true; }
+            }
+            return false;
         }
     }
     public class TourLog

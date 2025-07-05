@@ -29,9 +29,12 @@ namespace TourPlanner
             var tourInputs = new TourInputsViewModel();
             var logInputs = new LogInputsViewModel();
             var deleteTour = new DeleteTourViewModel();
+            var importTour = new ImportTourViewModel();
+            var exportTour = new ExportTourViewModel();
+            var generateReport = new GenerateReportViewModel();
 
             var tourAMDSelectionList = new AMDSelectionListViewModel(tourSearchBox, tourAMDControls, tourSelectionList);
-            var tourDisplay = new TourDisplayViewModel(tourInfoDisplay, routeInfoDisplay, tourInputs, logInfoDisplay, logInputs, logAMDControls, deleteTour);
+            var tourDisplay = new TourDisplayViewModel(tourInfoDisplay, routeInfoDisplay, tourInputs, logInfoDisplay, logInputs, logAMDControls, deleteTour, importTour, exportTour, generateReport);
 
             var mainViewModel = new MainViewModel(tourAMDSelectionList, tourDisplay);
 
