@@ -1,7 +1,10 @@
 ﻿using System.Configuration;
 using System.Data;
+using System.IO;
+using System.Reflection;
 using System.Windows;
-
+using log4net;
+using log4net.Config;
 using PresentationLayer.ViewModels;
 
 namespace TourPlanner
@@ -13,6 +16,8 @@ namespace TourPlanner
     {
         private void App_OnStartup(object sender, StartupEventArgs e)
         {
+            XmlConfigurator.Configure(LogManager.GetRepository(Assembly.GetEntryAssembly()), new FileInfo("log4net.config"));
+
             var tourSearchBox = new SearchBoxViewModel();
             var tourAMDControls = new AMDControlsViewModel();
             var tourSelectionList = new SelectionListViewModel();
@@ -23,20 +28,25 @@ namespace TourPlanner
             var routeInfoDisplay = new RouteInfoDisplayViewModel();
             var tourInputs = new TourInputsViewModel();
             var logInputs = new LogInputsViewModel();
+            var deleteTour = new DeleteTourViewModel();
+            var importTour = new ImportTourViewModel();
+            var exportTour = new ExportTourViewModel();
+            var generateReport = new GenerateReportViewModel();
 
             var tourAMDSelectionList = new AMDSelectionListViewModel(tourSearchBox, tourAMDControls, tourSelectionList);
-            var tourDisplay = new TourDisplayViewModel(tourInfoDisplay, routeInfoDisplay, tourInputs, logInfoDisplay, logInputs, logAMDControls);
+            var tourDisplay = new TourDisplayViewModel(tourInfoDisplay, routeInfoDisplay, tourInputs, logInfoDisplay, logInputs, logAMDControls, deleteTour, importTour, exportTour, generateReport);
+
+            var mainViewModel = new MainViewModel(tourAMDSelectionList, tourDisplay);
 
             var window = new MainWindow
             {
-                DataContext = new MainViewModel(tourAMDSelectionList, tourDisplay),
-                TourAMDSelectionList = { DataContext = tourAMDSelectionList }, 
-                DisplayTour = { DataContext = tourDisplay }
+                DataContext = mainViewModel,
+                TourAMDSelectionList = { DataContext = mainViewModel.tourAMDSelectionList }, 
+                DisplayTour = { DataContext = mainViewModel.tourDisplay }
             };
 
             window.Show();
         }
-
 
     }
 

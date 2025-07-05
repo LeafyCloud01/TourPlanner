@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Interop;
 
 namespace PresentationLayer.ViewModels
 {
@@ -12,18 +14,13 @@ namespace PresentationLayer.ViewModels
     {
         public TourList tourList = BusinessManager.GetTourList();
 
-        private readonly AMDSelectionListViewModel tourAMDSelectionList;
-        private readonly TourDisplayViewModel tourDisplay;
+        public readonly AMDSelectionListViewModel tourAMDSelectionList;
+        public readonly TourDisplayViewModel tourDisplay;
 
         public MainViewModel(AMDSelectionListViewModel tourAMDSelectionList, TourDisplayViewModel tourDisplay)
         {
             this.tourAMDSelectionList = tourAMDSelectionList;
             this.tourDisplay = tourDisplay;
-        }
-
-        private void ChangeTour(Tour tour)
-        {
-            tourList.ChangeTour(tour);
         }
     }
 }

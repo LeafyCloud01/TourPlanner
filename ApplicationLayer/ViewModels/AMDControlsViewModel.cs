@@ -1,19 +1,21 @@
-﻿using GalaSoft.MvvmLight.Command;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Input;
+using System.Windows;
+using GalaSoft.MvvmLight.Command;
+using BusinessLayer;
+using GalaSoft.MvvmLight.Messaging;
 
 namespace PresentationLayer.ViewModels
 {
     public class AMDControlsViewModel
     {
-        public ICommand AddElement { get; internal set; } //calls add X method in superceding view model
-        public ICommand DeleteElement { get; internal set; } //calls delete X method in superceding view model
-        public ICommand ModifyElement { get; internal set; } //calls modify X method in superceding view model
+        public ICommand AddElement { get; set; }
+        public ICommand DeleteElement { get; set; }
+        public ICommand ModifyElement { get; set; }
 
         public AMDControlsViewModel()
         {
@@ -22,21 +24,22 @@ namespace PresentationLayer.ViewModels
             CreateModifyElement();
         }
 
-        private void CreateAddElement() { AddElement = new RelayCommand(AddElementExecute); }
-        private void CreateDeleteElement() { DeleteElement = new RelayCommand(DeleteElementExecute); }
-        private void CreateModifyElement() { ModifyElement = new RelayCommand(ModifyElementExecute); }
+        private void CreateAddElement() { AddElement = new RelayCommand<string>(AddElementExecute); }
+        private void CreateDeleteElement() { DeleteElement = new RelayCommand<string>(DeleteElementExecute); }
+        private void CreateModifyElement() { ModifyElement = new RelayCommand<string>(ModifyElementExecute); }
 
-        public void AddElementExecute()
+        private void AddElementExecute(string type)
         {
-            MessageBox.Show("Add");
+            Messenger.Default.Send<string>("add_" + type);
+            Messenger.Default.Send<Tour>(new Tour());
         }
-        public void DeleteElementExecute()
+        private void DeleteElementExecute(string type)
         {
-            MessageBox.Show("Delete");
+            Messenger.Default.Send<string>("delete_" + type);
         }
-        public void ModifyElementExecute()
+        private void ModifyElementExecute(string type)
         {
-            MessageBox.Show("Modify");
+            Messenger.Default.Send<string>("edit_" + type);
         }
     }
 }

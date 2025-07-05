@@ -8,6 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="log4net" Version="3.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\DataAccessDatabase\DataAccessDatabase.csproj" />
     <ProjectReference Include="..\DataLayer\DataAccessFiles.csproj" />
   </ItemGroup>
