@@ -1,5 +1,5 @@
-using BusinessLayer;
-using log4net;
+//using BusinessLayer;
+//using log4net;
 using Npgsql;
 using System;
 using System.Collections.Generic;
@@ -11,9 +11,13 @@ namespace DataAccessDatabase
 {
     public class AccessDatabase
     {
-        public readonly NpgsqlDataSource? dataBase;
+        //public readonly NpgsqlDataSource? dataBase;
 
-        public AccessDatabase(string ConfigPath)
+        public AccessDatabase ()
+        {
+
+        }
+        /*public AccessDatabase(string ConfigPath)
         {
             string connectionInfo = ReadConnectionInfo(ConfigPath);
             try
@@ -24,7 +28,7 @@ namespace DataAccessDatabase
             {
                 Console.WriteLine("NpgSqlException: {0}", e);
             }
-        }
+        }*/
 
         private string ReadConnectionInfo(string ConfigPath)
         {
@@ -39,62 +43,27 @@ namespace DataAccessDatabase
             return "";
         }
 
-        public TourList GetToursLogs()
+        public static List<Tour> GetTours()
         {
-            TourList AllTours = new TourList();
-            if (dataBase != null)
+            List<Tour> Tours;
+            using (var context = new TourPlannerContext())
             {
-                using var Connection = dataBase.OpenConnection();
-                using var Select = dataBase.CreateCommand("SELECT * FROM tours;");
-                using var Reader = Select.ExecuteReader();
-
-                if (Reader.HasRows)
-                {
-                    while (Reader.Read())
-                    {
-                        int id = (int)Reader.GetValue(0);
-                        var name = (Reader.GetString(1) == null) ? "" : Reader.GetString(1);
-                        var description = (Reader.GetString(2) == null) ? "" : Reader.GetString(2);
-                        var from = Reader.GetString(3);
-                        var to = Reader.GetString(4);
-                        var transport_type = (Reader.GetString(5) == null) ? "" : Reader.GetString(5);
-                        var distance = Reader.GetFloat(6);
-                        var time = Reader.GetDateTime(7);
-                        var information = (Reader.GetString(8) == null) ? "" : Reader.GetString(8);
-                        Transport transport;
-                        Enum.TryParse(transport_type, out transport);
-                        AllTours.ChangeTour(new Tour(id, name, description, from, to, transport, distance, time, information, new LogList()));
-                    }
-                    foreach (Tour t in AllTours.tours)
-                    {
-                        using var SelectLogs = dataBase.CreateCommand("SELECT * FROM logs WHERE tour_id = $1;");
-                        SelectLogs.Parameters.AddWithValue(NpgsqlTypes.NpgsqlDbType.Integer, t.ID);
-                        using var LogReader = SelectLogs.ExecuteReader();
-                        if (LogReader.HasRows)
-                        {
-                            while (LogReader.Read())
-                            {
-                                int id = (int)Reader.GetValue(0);
-                                var time = Reader.GetDateTime(1);
-                                var comment = (Reader.GetString(2) == null) ? "" : Reader.GetString(2);
-                                var difficulty = Reader.GetInt64(3);
-                                var distance = Reader.GetFloat(4);
-                                var to = Reader.GetString(4);
-                                var transport_type = (Reader.GetString(5) == null) ? "" : Reader.GetString(5);
-                                var total_time = Reader.GetDateTime(6);
-                                var rating = Reader.GetFloat(7);
-                                t.logs.ChangeLog(new TourLog(id, time, comment, difficulty, distance, total_time, rating));
-                            }
-                        }
-                    }
-
-                }
-                Connection.Close();
+                Tours = context.Tours.ToList();
             }
-            return AllTours;
+            return Tours;
         }
 
-        public void AddTour(Tour Tour)
+        public static List<Log> GetLogs() 
+        {
+            List<Log> Logs;
+            using (var context = new TourPlannerContext())
+            {
+                Logs = context.Logs.ToList();
+            }
+            return Logs;
+        }
+
+        /*public void AddTour(Tour Tour)
         {
             if (dataBase != null)
             {
@@ -202,7 +171,7 @@ namespace DataAccessDatabase
             {
                 dataBase.Clear();
             }
-        }
+        }*/
     }
-
+    
 }

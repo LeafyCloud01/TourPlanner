@@ -1,4 +1,5 @@
-﻿using DataAccessFiles;
+﻿using DataAccessDatabase;
+using DataAccessFiles;
 using iText.Kernel.Pdf;
 using log4net;
 using log4net.Config;
@@ -8,11 +9,13 @@ using System.Collections.Generic;
 using System.Data.Common;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Reflection;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows;
+using static iText.StyledXmlParser.Jsoup.Select.Evaluator;
 
 namespace BusinessLayer
 {
@@ -31,6 +34,12 @@ namespace BusinessLayer
 
         public static TourList GetTourListDb()
         {
+            TourList tourList = new TourList();
+            var Tours = AccessDatabase.GetTours();
+            foreach (var t in Tours) 
+            {
+                tourList.ChangeTour(new BusinessLayer.Tour(t.TourId, t.Name, t.Description, t.FromCoord, t.ToCoord, Transport transportType, float tourDistance, DateTime estimatedTime, string routeInformation, LogList logs));
+            }
             return null;
         }
 
