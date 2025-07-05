@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace PresentationLayer.Views
 {
     /// <summary>
-    /// Interaction logic for AMDControls.xaml
+    /// Interaction logic for DeleteTour.xaml
     /// </summary>
-    public partial class AMDControls : UserControl
+    public partial class DeleteTour : UserControl
     {
-        public AMDControls()
+        public DeleteTour()
         {
             InitializeComponent();
         }

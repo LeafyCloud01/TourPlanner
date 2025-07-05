@@ -30,7 +30,7 @@
             </Grid.ColumnDefinitions>
 
             <TextBlock Grid.Row="0" Grid.Column="0" FontSize="16">Tours</TextBlock>
-            <local:AMDControls x:Name="AMDTourControls" Grid.Row="0" Grid.Column="2"/>
+            <local:TourAMDControls x:Name="AMDTourControls" Grid.Row="0" Grid.Column="2"/>
         </Grid>
         
         <local:SelectionList x:Name="TourSelectionList" Grid.Row="2" Grid.Column="0"/>

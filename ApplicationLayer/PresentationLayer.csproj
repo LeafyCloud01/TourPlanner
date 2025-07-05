@@ -13,6 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="log4net" Version="3.1.0" />
     <PackageReference Include="MvvmLightLibs" Version="5.4.1.1" />
   </ItemGroup>
 
@@ -22,6 +23,15 @@
 
   <ItemGroup>
     <Resource Include="Views\PlaceholderMap.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="App.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="log4net.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

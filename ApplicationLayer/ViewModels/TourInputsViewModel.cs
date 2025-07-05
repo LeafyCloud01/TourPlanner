@@ -1,5 +1,6 @@
 ﻿using BusinessLayer;
 using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight.Messaging;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -13,13 +14,13 @@ namespace PresentationLayer.ViewModels
 {
     public class TourInputsViewModel : INotifyPropertyChanged
     {
-        public static Tour _TourInfo = new Tour();
+        public static Tour _TourInfo = BusinessManager.GetTourList().tours[0];
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
         public event EventHandler<Tour> TourInputsChanged;
 
-        public ICommand ChangeTour { get; internal set; }
+        public ICommand ChangeTour { get; set; }
         
         public string Name
         {
@@ -54,12 +55,25 @@ namespace PresentationLayer.ViewModels
         public TourInputsViewModel()
         {
             CreateChangeTour();
+
+            Messenger.Default.Register<Tour>(this, (action) => ReceiveCurrentTour(action));
+        }
+
+        private void ReceiveCurrentTour(Tour CurrentTour)
+        {
+            this.Name = CurrentTour.name;
+            this.Description = CurrentTour.description;
+            this.From = CurrentTour.from;
+            this.To = CurrentTour.to;
+            this.TransportType = CurrentTour.transportType;
         }
 
         private void CreateChangeTour() { ChangeTour = new RelayCommand(ChangeTourExecute); }
         public void ChangeTourExecute() 
         {
             BusinessManager.ChangeTour(_TourInfo);
+            Messenger.Default.Send<TourList>(BusinessManager.GetTourList());
+            Messenger.Default.Send<string>("default_tabs");
         }
     }
 }

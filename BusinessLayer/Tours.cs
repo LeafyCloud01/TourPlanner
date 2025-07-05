@@ -25,30 +25,52 @@ namespace BusinessLayer
 
         public List<Tour> tours { get; set; }
 
-        public void ChangeTour(Tour tour)
+        public bool ChangeTour(Tour tour)
         {
             int exists = -1;
             for (int i = 0; i < tours.Count; i++)
             {
-                if (tours[i].Name == tour.Name) { exists = i; break; }
+                if (tours[i].ID == tour.ID) { exists = i; break; }
             }
             if(exists != -1)
             {
                 tours[exists] = tour;
+                return true;
             }
             else
             {
                 tours.Add(tour);
+                return false;
             }
         }
-        public void DeleteTour(Tour tour)
+        public void DeleteTour(int tourID)
         {
             int exists = -1;
             for (int i = 0; i < tours.Count; i++)
             {
-                if (tours[i].Name == tour.Name) { exists = i; break; }
+                if (tours[i].ID == tourID) { exists = i; break; }
             }
             tours.RemoveAt(exists);
+        }
+
+        public Tour? getTour(int tourID)
+        {
+            for (int i = 0; i < tours.Count; i++)
+            {
+                if (tours[i].ID == tourID) { return tours[i]; }
+            }
+            return null;
+        }
+
+        public void getTours(string SearchText)
+        {
+            List<Tour> matchingTours = [];
+            for (int i = 0; i < tours.Count; i++)
+            {
+                bool includes_match = tours[i].includesMatch(SearchText);
+                if (includes_match) { matchingTours.Add(tours[i]); }
+            }
+            tours = matchingTours;
         }
 
         public ObservableCollection<Tour> GetTours()
@@ -62,12 +84,39 @@ namespace BusinessLayer
 
             return tourDisplays;
         }
+
+        public bool ChangeTourLog(int tourID, TourLog logInfo)
+        {
+            bool isEdit = false;
+            for (int i = 0; i < tours.Count; i++)
+            {
+                if (tours[i].ID == tourID)
+                {
+                    isEdit = tours[i].logs.ChangeLog(logInfo);
+                    tours[i].UpdatePopularity();
+                    tours[i].UpdateChildFriendliness();
+                }
+            }
+            return isEdit;
+        }
+
+        public void DeleteTourLog(int tourID, int logID)
+        {
+            for (int i = 0; i < tours.Count; i++)
+            {
+                if (tours[i].ID == tourID)
+                {
+                    tours[i].logs.DeleteLog(logID);
+                }
+            }
+        }
     }
 
     public class Tour
     {
         public Tour()
         {
+            this.ID = -1;
             this.name = "A Tour";
             this.description = "A description";
             this.from = "A";
@@ -78,8 +127,9 @@ namespace BusinessLayer
             this.routeInformation = "";
             this.logs = new();
         }
-        public Tour(string name, string description, string from, string to, Transport transportType, float tourDistance, Time estimatedTime, string routeInformation, LogList logs)
+        public Tour(int ID, string name, string description, string from, string to, Transport transportType, float tourDistance, Time estimatedTime, string routeInformation, LogList logs)
         {
+            this.ID = ID;
             this.name = name;
             this.description = description;
             this.from = from;
@@ -94,6 +144,7 @@ namespace BusinessLayer
             UpdateChildFriendliness();
         }
 
+        public int ID { get; set; }
         public string name { get; set; }
         public string description { get; set; }
         public string from { get; set; }
@@ -149,11 +200,7 @@ namespace BusinessLayer
             if (Search.Contains("" + childFriendliness)) { return true; }
 
             // log search values
-            for (int i = 0; i < logs.logs.Count; i++)
-            {
-                bool includes_match = logs.logs[i].includesMatch(Search);
-                if (includes_match) { return true; }
-            }
+            if (logs.includesMatch("Search")) { return true; }
 
             return false;
         }
@@ -169,28 +216,30 @@ namespace BusinessLayer
 
         public List<TourLog> logs { get; set; }
 
-        public void ChangeLog(TourLog log)
+        public bool ChangeLog(TourLog log)
         {
             int exists = -1;
             for (int i = 0; i < logs.Count; i++)
             {
-                if (logs[i].dateTime == log.dateTime) { exists = i; break; }
+                if (logs[i].ID == log.ID) { exists = i; break; }
             }
             if (exists != -1)
             {
                 logs[exists] = log;
+                return true;
             }
             else
             {
                 logs.Add(log);
+                return false;
             }
         }
-        public void DeleteLog(TourLog log)
+        public void DeleteLog(int logID)
         {
             int exists = -1;
             for (int i = 0; i < logs.Count; i++)
             {
-                if (logs[i].dateTime == log.dateTime) { exists = i; break; }
+                if (logs[i].ID == logID) { exists = i; break; }
             }
             if(exists != -1) { logs.RemoveAt(exists); }
         }
@@ -215,7 +264,7 @@ namespace BusinessLayer
                 difficulty += logs[i].difficulty;
             }
 
-            return difficulty;
+            return difficulty/logs.Count;
         }
 
         public ObservableCollection<TourLog> GetLogs()
@@ -229,11 +278,22 @@ namespace BusinessLayer
 
             return logDisplays;
         }
+
+        public bool includesMatch(string SearchText)
+        {
+            for (int i = 0; i < logs.Count; i++)
+            {
+                bool includes_match = logs[i].includesMatch(SearchText);
+                if (includes_match) { return true; }
+            }
+            return false;
+        }
     }
     public class TourLog
     {
         public TourLog()
         {
+            this.ID = -1;
             this.dateTime = new();
             this.comment = "A comment";
             this.difficulty = 0;
@@ -241,8 +301,9 @@ namespace BusinessLayer
             this.totalTime = new();
             this.rating = 1;
         }
-        public TourLog(DateTime dateTime, string comment, float difficulty, float totalDistance, Time totalTime, float rating) 
+        public TourLog(int ID, DateTime dateTime, string comment, float difficulty, float totalDistance, Time totalTime, float rating) 
         { 
+            this.ID = ID;
             this.dateTime = dateTime;
             this.comment = comment;
             this.difficulty = difficulty;
@@ -251,6 +312,7 @@ namespace BusinessLayer
             this.rating = rating;
         }
 
+        public int ID {  get; set; }
         public DateTime dateTime { get; set; }
         public string comment { get; set; }
         public float difficulty { get; set; }
