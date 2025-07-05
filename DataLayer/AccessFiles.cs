@@ -20,6 +20,10 @@ namespace DataAccessFiles
         {
             return Path.Combine(root + directory, FileName);
         }
+        public static string GetFilePath(string FileName, string Directory)
+        {
+            return Path.Combine(root + Directory, FileName);
+        }
         public static void CreateFile(string FileName)
         {
             File.Create(GetFilePath(FileName));

@@ -30,7 +30,7 @@ namespace PresentationLayer.ViewModels
         }
         public TourInfoDisplayViewModel()
         {
-            TourList currentTours = BusinessManager.GetTourList();
+            TourList currentTours = BusinessManager.GetTourListDb();
             _TourInfo = (currentTours.tours.Count > 0) ? currentTours.tours[0] : new Tour();
 
             Messenger.Default.Register<Tour>(this, (action) => ReceiveCurrentTour(action));

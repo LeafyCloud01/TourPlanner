@@ -9,11 +9,11 @@ using System.Net;
 
 namespace DataAccessDatabase
 {
-    public class DbConnection
+    public class AccessDatabase
     {
         public readonly NpgsqlDataSource? dataBase;
 
-        public DbConnection(string ConfigPath)
+        public AccessDatabase(string ConfigPath)
         {
             string connectionInfo = ReadConnectionInfo(ConfigPath);
             try
@@ -196,7 +196,7 @@ namespace DataAccessDatabase
             }
         }
 
-        ~DbConnection() 
+        ~AccessDatabase() 
         {
             if (dataBase != null)
             {

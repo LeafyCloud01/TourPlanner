@@ -16,7 +16,7 @@ namespace PresentationLayer.ViewModels
 {
     public class SelectionListViewModel : INotifyPropertyChanged
     {
-        public static TourList _TourList = BusinessManager.GetTourList();
+        public static TourList _TourList = BusinessManager.GetTourListDb();
         public ObservableCollection<Tour> _Tours = _TourList.GetTours();
 
         public event PropertyChangedEventHandler? PropertyChanged;

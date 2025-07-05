@@ -5,6 +5,7 @@ using log4net.Config;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -18,8 +19,9 @@ namespace BusinessLayer
     public class BusinessManager
     {
         private static readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        
 
-        public static TourList GetTourList()
+        public static TourList GetTourListFile()
         {
             string toursString = AccessFiles.GetFileContent("Tours.json"); 
             TourList? tourList = JsonSerializer.Deserialize<TourList>(toursString);
@@ -27,13 +29,18 @@ namespace BusinessLayer
             return (tourList != null)? tourList : new TourList();
         }
 
+        public static TourList GetTourListDb()
+        {
+            return null;
+        }
+
         public static TourList GetTourList(string Search)
         {
             TourList matchingTours = new TourList(); matchingTours.tours = [];
 
-            if (Search == "") { return GetTourList(); }
+            if (Search == "") { return GetTourListDb(); }
 
-            TourList tours = GetTourList();
+            TourList tours = GetTourListDb();
 
             tours.getTours(Search);
 
@@ -64,7 +71,7 @@ namespace BusinessLayer
         public static void ChangeTour(Tour tour)
         {
             log.Info("Changing Tour: " + tour.ID);
-            TourList tourList = GetTourList();
+            TourList tourList = GetTourListDb();
             bool exists = tourList.ChangeTour(tour);
 
             UpdateTourList(tourList);
@@ -73,7 +80,7 @@ namespace BusinessLayer
         public static void DeleteTour(int tourID)
         {
             log.Info("Deleting Tour: " + tourID);
-            TourList tourList = GetTourList();
+            TourList tourList = GetTourListDb();
             tourList.DeleteTour(tourID);
 
             UpdateTourList(tourList);
@@ -82,7 +89,7 @@ namespace BusinessLayer
         public static void ChangeLog(int tourID, TourLog logInfo)
         {
             log.Info("Changing Log: " + logInfo.ID);
-            TourList tourList = GetTourList();
+            TourList tourList = GetTourListDb();
             bool exists = tourList.ChangeTourLog(tourID, logInfo);
 
             UpdateTourList(tourList);
@@ -91,7 +98,7 @@ namespace BusinessLayer
         public static void DeleteLog(int tourID, int logID)
         {
             log.Info("Deleting Log: " + logID);
-            TourList tourList = GetTourList();
+            TourList tourList = GetTourListDb();
             tourList.DeleteTourLog(tourID, logID);
 
             UpdateTourList(tourList);
@@ -100,7 +107,7 @@ namespace BusinessLayer
 
         public static bool ExportTour(int currentTourID, string Format)
         {
-            Tour tourToExport = GetTourList().getTour(currentTourID);
+            Tour tourToExport = GetTourListDb().getTour(currentTourID);
             if (tourToExport == null) 
             { 
                 log.Error("Unable to export tour: tour ID not found in Tour List."); 
@@ -140,12 +147,12 @@ namespace BusinessLayer
             {
                 case "tour_report":
                     reportPath = AccessFiles.getExportPath("Generate Report");
-                    Tour reportedTour = GetTourList().getTour(CurrentTourID);
+                    Tour reportedTour = GetTourListDb().getTour(CurrentTourID);
                     return reportedTour.generateReport();
 
                 case "summarize_report":
                     reportPath = AccessFiles.getExportPath("Generate Report");
-                    TourList tours = GetTourList();
+                    TourList tours = GetTourListDb();
                     return tours.generateReport();
             }
 

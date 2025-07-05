@@ -27,7 +27,7 @@ namespace PresentationLayer.ViewModels
         private void ImportTourExecute(string Format)
         {
             bool imported = BusinessManager.ImportTour(Format);
-            Messenger.Default.Send<TourList>(BusinessManager.GetTourList());
+            Messenger.Default.Send<TourList>(BusinessManager.GetTourListDb());
             if(imported) { MessageBox.Show("Tour Successfully Imported!"); }
             else { MessageBox.Show("An error occurred importing tour from json"); }
         }
