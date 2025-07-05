@@ -46,15 +46,15 @@ namespace BusinessLayer
         }
         private static void UpdateTourList_DeleteTour(int tourID)
         {
-            
+
         }
         private static void UpdateTourList_ChangeTour(bool exists, Tour tour)
         {
-            
+
         }
         private static void UpdateTourList_DeleteLog(int tourID, int logID)
         {
-            
+
         }
         private static void UpdateTourList_ChangeLog(bool exists, int tourID, TourLog log)
         {
@@ -64,9 +64,9 @@ namespace BusinessLayer
         public static void ChangeTour(Tour tour)
         {
             log.Info("Changing Tour: " + tour.ID);
-            TourList tourList = GetTourList(); 
-            bool exists = tourList.ChangeTour(tour); 
-            
+            TourList tourList = GetTourList();
+            bool exists = tourList.ChangeTour(tour);
+
             UpdateTourList(tourList);
             UpdateTourList_ChangeTour(exists, tour);
         }
@@ -75,7 +75,7 @@ namespace BusinessLayer
             log.Info("Deleting Tour: " + tourID);
             TourList tourList = GetTourList();
             tourList.DeleteTour(tourID);
-            
+
             UpdateTourList(tourList);
             UpdateTourList_DeleteTour(tourID);
         }
@@ -84,7 +84,7 @@ namespace BusinessLayer
             log.Info("Changing Log: " + logInfo.ID);
             TourList tourList = GetTourList();
             bool exists = tourList.ChangeTourLog(tourID, logInfo);
-            
+
             UpdateTourList(tourList);
             UpdateTourList_ChangeLog(exists, tourID, logInfo);
         }
@@ -93,7 +93,7 @@ namespace BusinessLayer
             log.Info("Deleting Log: " + logID);
             TourList tourList = GetTourList();
             tourList.DeleteTourLog(tourID, logID);
-            
+
             UpdateTourList(tourList);
             UpdateTourList_DeleteLog(tourID, logID);
         }
