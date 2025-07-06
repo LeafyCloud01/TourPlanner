@@ -11,7 +11,7 @@ namespace DataAccessAPI
         {
         }
 
-        public static async Task<string> GetRouteData(int fromlat, int fromlon, int tolat, int tolon)
+        public static async Task<string> GetRouteData(double fromlat, double fromlon, double tolat, double tolon)
         {
             OpenRouteService OpenRouteService = new();
             using (var http = new HttpClient { BaseAddress = OpenRouteService.BaseUrl })
