@@ -40,7 +40,7 @@ namespace DataAccessDatabase
             using (var context = new TourPlannerContext())
             {
                var oldTour = context.Tours.Where(t => t.TourId.Equals(Tour.TourId)).Single();
-                if (oldTour != null)
+                if (oldTour == null)
                 {
                     context.Tours.Add(Tour);
                 }
