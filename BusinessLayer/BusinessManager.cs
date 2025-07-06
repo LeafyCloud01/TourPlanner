@@ -15,6 +15,7 @@ using System.Net;
 using System.Reflection;
 using System.Text;
 using System.Text.Json;
+using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
@@ -27,13 +28,23 @@ namespace BusinessLayer
     {
         private static readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         
-        public static void GetMapImage(Tour tour)
+        public static Tour GetMapImage(Tour tour)
         {
             tour.routeInformation = AccessAPI.GetMapCoords(tour.ParseCoordinates());
+            return tour;
         }
 
-        public static string GetRoute() {
-            return "";
+        public static Tour GetRoute(Tour tour)
+        {
+            var task = AccessAPI.GetRouteData(tour.ParseCoordinates(), (int)tour.transportType);
+            var result = task.Result;
+            var json = JsonNode.Parse(result);
+            if (json != null)
+            {
+                tour.tourDistance = (float)json["routes"]["summary"]["distance"];
+                tour.estimatedTime.Add(TimeSpan.FromSeconds((double)json["routes"]["summary"]["duration"]));
+            }
+            return tour;
         }
 
         public static TourList GetTourListFile()
@@ -144,6 +155,8 @@ namespace BusinessLayer
         {
             log.Info("Changing Tour: " + tour.ID);
             TourList tourList = GetTourListDb();
+            tour = GetMapImage(tour);
+            tour = GetRoute(tour);
             tourList.ChangeTour(tour);
 
             UpdateTourList(tourList);

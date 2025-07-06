@@ -2,6 +2,7 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Net.Http.Headers;
+using System.Net;
 
 namespace DataAccessAPI
 {
@@ -11,9 +12,10 @@ namespace DataAccessAPI
         {
         }
 
-        public static async Task<string> GetRouteData(double fromlat, double fromlon, double tolat, double tolon)
+        public static async Task<string> GetRouteData(List<double> Coords, int type)
         {
             OpenRouteService OpenRouteService = new();
+            List<string> transport = ["foot-walking", "foot-hiking", "cycling-regular", "driving-car"];
             using (var http = new HttpClient { BaseAddress = OpenRouteService.BaseUrl })
             {
                 http.DefaultRequestHeaders.Clear();
@@ -22,9 +24,9 @@ namespace DataAccessAPI
                 http.DefaultRequestHeaders.Authorization =
                     new AuthenticationHeaderValue("Bearer", $"{OpenRouteService.Key}");
 
-                using (var content = new StringContent($"{{\"coordinates\":[[{fromlat},{fromlon}],[{tolat},{tolon}]]}}"))
+                using (var content = new StringContent($"{{\"coordinates\":[[{Coords[0]},{Coords[1]}],[{Coords[2]},{Coords[3]}]]}}"))
                 {
-                    using (var response = await http.PostAsync("/v2/directions/driving-car", content))
+                    using (var response = await http.PostAsync($"/v2/directions/{transport[type]}/json", content))
                     {
                         string responseData = await response.Content.ReadAsStringAsync();
                         return responseData;

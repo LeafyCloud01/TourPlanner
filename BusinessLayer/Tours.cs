@@ -8,7 +8,7 @@ using System.Xml.Linq;
 
 namespace BusinessLayer
 {
-    public enum Transport { Walking, Bicycle, Vehicle }
+    public enum Transport { Walking, Hiking, Bicycle, Vehicle }
 
     public class TourList
     {
