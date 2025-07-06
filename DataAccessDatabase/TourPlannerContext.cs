@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
+using System.Configuration;
 
 namespace DataAccessDatabase
 {
@@ -24,7 +25,7 @@ namespace DataAccessDatabase
         public virtual DbSet<Tour> Tours { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-            => optionsBuilder.UseNpgsql("Host=127.0.0.1:5433;Database=tour_planner;Username=tour_server;Password=L9vCSjLsY07EAtwC;");
+            => optionsBuilder.UseNpgsql(ConfigurationManager.ConnectionStrings["TourPlannerDb"].ConnectionString);
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
