@@ -86,29 +86,61 @@ namespace BusinessLayer
         }
         private static void UpdateTourList_DeleteTour(int tourID)
         {
-
+            AccessDatabase.DeleteTour(tourID);
         }
-        private static void UpdateTourList_ChangeTour(bool exists, Tour tour)
+        private static void UpdateTourList_ChangeTour(Tour tour)
         {
+            var NewTour = TransformToDb(tour);
+            AccessDatabase.ChangeTour(NewTour);
 
         }
         private static void UpdateTourList_DeleteLog(int tourID, int logID)
         {
-
+            AccessDatabase.DeleteLog(logID);
         }
-        private static void UpdateTourList_ChangeLog(bool exists, int tourID, TourLog log)
+        private static void UpdateTourList_ChangeLog(int tourID, TourLog log)
         {
+            var NewLog = TransformToDb(log, tourID);
+            AccessDatabase.ChangeLog(NewLog);
+        }
 
+        private static DataAccessDatabase.Tour TransformToDb(Tour tour)
+        {
+            var DbTour = new DataAccessDatabase.Tour();
+            DbTour.TourId = tour.ID;
+            DbTour.Name = tour.Name;
+            DbTour.Description = tour.Description;
+            DbTour.FromCoord = tour.From;
+            DbTour.ToCoord = tour.To;
+            DbTour.TransportType = tour.TransportType;
+            DbTour.Distance = tour.tourDistance;
+            DbTour.Duration = tour.estimatedTime;
+            DbTour.Information = tour.routeInformation;
+            return DbTour;
+        }
+
+        private static Log TransformToDb(TourLog Log, int TourId)
+        {
+            var DbLog = new Log();
+            DbLog.LogId = Log.ID;
+            DbLog.DateCreated = Log.dateTime;
+            DbLog.Comment = Log.comment;
+            DbLog.Difficulty = (int)Log.difficulty;
+            DbLog.TotalDistance = Log.totalDistance;
+            DbLog.TotalTime = Log.totalTime;
+            DbLog.Rating = (int)Log.Rating;
+            DbLog.Tour = TourId;
+            return DbLog;
         }
 
         public static void ChangeTour(Tour tour)
         {
             log.Info("Changing Tour: " + tour.ID);
             TourList tourList = GetTourListDb();
-            bool exists = tourList.ChangeTour(tour);
+            tourList.ChangeTour(tour);
 
             UpdateTourList(tourList);
-            UpdateTourList_ChangeTour(exists, tour);
+            UpdateTourList_ChangeTour(tour);
         }
         public static void DeleteTour(int tourID)
         {
@@ -123,10 +155,10 @@ namespace BusinessLayer
         {
             log.Info("Changing Log: " + logInfo.ID);
             TourList tourList = GetTourListDb();
-            bool exists = tourList.ChangeTourLog(tourID, logInfo);
+            tourList.ChangeTourLog(tourID, logInfo);
 
             UpdateTourList(tourList);
-            UpdateTourList_ChangeLog(exists, tourID, logInfo);
+            UpdateTourList_ChangeLog(tourID, logInfo);
         }
         public static void DeleteLog(int tourID, int logID)
         {
