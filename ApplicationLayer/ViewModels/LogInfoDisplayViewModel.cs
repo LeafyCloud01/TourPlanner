@@ -17,7 +17,7 @@ namespace PresentationLayer.ViewModels
 {
     public class LogInfoDisplayViewModel : INotifyPropertyChanged
     {
-        public static LogList _Logs = (BusinessManager.GetTourListDb().tours.Count > 0) ? BusinessManager.GetTourListDb().tours[0].logs: new LogList();
+        public static LogList _Logs = (BusinessManager.GetTourList().tours.Count > 0) ? BusinessManager.GetTourList().tours[0].logs: new LogList();
         public ObservableCollection<TourLog> Logs = _Logs.GetLogs();
 
         public event PropertyChangedEventHandler? PropertyChanged;
@@ -45,7 +45,7 @@ namespace PresentationLayer.ViewModels
             CreateAddLog();
             CreateEditLog();
             CreateDeleteLog();
-            CurrentTour = BusinessManager.GetTourListDb().tours[0];
+            CurrentTour = BusinessManager.GetTourList().tours[0];
         }
 
         private void CreateAddLog() { AddLog = new RelayCommand<string>(AddLogExecute); }
@@ -74,7 +74,7 @@ namespace PresentationLayer.ViewModels
                 case MessageBoxResult.Yes:
                     Tour currentTour = CurrentTour;
                     BusinessManager.DeleteLog(CurrentTour.ID, log);
-                    Messenger.Default.Send<TourList>(BusinessManager.GetTourListDb());
+                    Messenger.Default.Send<TourList>(BusinessManager.GetTourList());
                     Messenger.Default.Send<Tour>(currentTour);
                     break;
             }

@@ -32,7 +32,7 @@ namespace PresentationLayer.ViewModels
         private void updateSearch(string text)
         {
             if(text != "") { Messenger.Default.Send<TourList>(BusinessManager.GetTourList(text)); }
-            else { Messenger.Default.Send<TourList>(BusinessManager.GetTourListDb()); }
+            else { Messenger.Default.Send<TourList>(BusinessManager.GetTourList()); }
         }
 
         public SearchBoxViewModel() { }

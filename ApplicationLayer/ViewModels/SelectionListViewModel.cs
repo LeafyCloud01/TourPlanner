@@ -16,8 +16,8 @@ namespace PresentationLayer.ViewModels
 {
     public class SelectionListViewModel : INotifyPropertyChanged
     {
-        public static TourList _TourList = BusinessManager.GetTourListDb();
-        public ObservableCollection<Tour> _Tours = _TourList.GetTours();
+        public static TourList _TourList = BusinessManager.GetTourList();
+        public ObservableCollection<Tour> _Tours = _TourList.Transform(new ObservableCollection<Tour>());
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
@@ -44,7 +44,7 @@ namespace PresentationLayer.ViewModels
 
         private void ReceiveCurrentTourList(TourList CurrentTours)
         {
-            Tours = CurrentTours.GetTours();
+            Tours = CurrentTours.Transform(new ObservableCollection<Tour>());
             Messenger.Default.Send<Tour>(CurrentTours.tours[0]);
         }
 

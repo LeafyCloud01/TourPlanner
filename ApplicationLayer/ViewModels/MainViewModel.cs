@@ -12,7 +12,7 @@ namespace PresentationLayer.ViewModels
 {
     public class MainViewModel
     {
-        public TourList tourList = BusinessManager.GetTourListDb();
+        public TourList tourList = BusinessManager.GetTourList();
 
         public readonly AMDSelectionListViewModel tourAMDSelectionList;
         public readonly TourDisplayViewModel tourDisplay;

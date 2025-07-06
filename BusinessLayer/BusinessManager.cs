@@ -25,7 +25,20 @@ namespace BusinessLayer
     public class BusinessManager
     {
         private static readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-        
+
+        private static string DataAccessType = "File";
+
+        public static TourList GetTourList()
+        {
+            switch (DataAccessType)
+            {
+                case "DB":
+                    return GetTourListDb();
+                case "File":
+                    return GetTourListFile();
+            }
+            return new TourList();
+        }
 
         public static TourList GetTourListFile()
         {
@@ -41,13 +54,7 @@ namespace BusinessLayer
             var Tours = AccessDatabase.GetTours();
             foreach (var t in Tours) 
             {
-                float distance = (t.Distance ==null)? 0 : (float)t.Distance;
-                TimeOnly duration = (t.Duration == null) ? new TimeOnly() : (TimeOnly)t.Duration;
-                if (!Enum.TryParse(t.TransportType, out Transport transport))
-                {
-                    transport = Transport.Walking;
-                }
-                tourList.ChangeTour(new BusinessLayer.Tour(t.TourId, t.Name ?? "", t.Description ?? "", t.FromCoord, t.ToCoord, transport, distance, duration, t.Information ?? "", new LogList()));
+                tourList.ChangeTour(new BusinessLayer.Tour(t));
             }
             foreach (var tour in tourList.tours)
             {
@@ -56,9 +63,7 @@ namespace BusinessLayer
                     var Logs = AccessDatabase.GetLogs(tour.ID);
                     foreach (var l in Logs) 
                     {
-                        TimeOnly totaltime = (l.TotalTime == null) ? new TimeOnly() : (TimeOnly)l.TotalTime;
-                        int rating = (l.Rating == null) ? 0 : (int)l.Rating;
-                        tour.logs.ChangeLog(new TourLog(l.LogId, l.DateCreated, l.Comment?? "", l.Difficulty, l.TotalDistance, totaltime, rating));    
+                        tour.logs.ChangeLog(new TourLog(l));    
                     }
                 }
             }
@@ -69,9 +74,9 @@ namespace BusinessLayer
         {
             TourList matchingTours = new TourList(); matchingTours.tours = [];
 
-            if (Search == "") { return GetTourListDb(); }
+            if (Search == "") { return GetTourList(); }
 
-            TourList tours = GetTourListDb();
+            TourList tours = GetTourList();
 
             tours.getTours(Search);
 
@@ -88,7 +93,7 @@ namespace BusinessLayer
         }
         private static void UpdateTourList_ChangeTour(Tour tour)
         {
-            var NewTour = TransformToDb(tour);
+            var NewTour = tour.Transform(new DataAccessDatabase.Tour());
             AccessDatabase.ChangeTour(NewTour);
 
         }
@@ -98,79 +103,50 @@ namespace BusinessLayer
         }
         private static void UpdateTourList_ChangeLog(int tourID, TourLog log)
         {
-            var NewLog = TransformToDb(log, tourID);
+            var NewLog = log.Transform(new DataAccessDatabase.Log(), tourID);
             AccessDatabase.ChangeLog(NewLog);
-        }
-
-        private static DataAccessDatabase.Tour TransformToDb(Tour tour)
-        {
-            var DbTour = new DataAccessDatabase.Tour();
-            DbTour.TourId = tour.ID;
-            DbTour.Name = tour.Name;
-            DbTour.Description = tour.Description;
-            DbTour.FromCoord = tour.From;
-            DbTour.ToCoord = tour.To;
-            DbTour.TransportType = tour.TransportType;
-            DbTour.Distance = tour.tourDistance;
-            DbTour.Duration = tour.estimatedTime;
-            DbTour.Information = tour.routeInformation;
-            return DbTour;
-        }
-
-        private static Log TransformToDb(TourLog Log, int TourId)
-        {
-            var DbLog = new Log();
-            DbLog.LogId = Log.ID;
-            DbLog.DateCreated = Log.dateTime;
-            DbLog.Comment = Log.comment;
-            DbLog.Difficulty = (int)Log.difficulty;
-            DbLog.TotalDistance = Log.totalDistance;
-            DbLog.TotalTime = Log.totalTime;
-            DbLog.Rating = (int)Log.Rating;
-            DbLog.Tour = TourId;
-            return DbLog;
         }
 
         public static void ChangeTour(Tour tour)
         {
             log.Info("Changing Tour: " + tour.ID);
-            TourList tourList = GetTourListDb();
+            TourList tourList = GetTourList();
             tourList.ChangeTour(tour);
 
             UpdateTourList(tourList);
-            UpdateTourList_ChangeTour(tour);
+            //UpdateTourList_ChangeTour(tour);
         }
         public static void DeleteTour(int tourID)
         {
             log.Info("Deleting Tour: " + tourID);
-            TourList tourList = GetTourListDb();
+            TourList tourList = GetTourList();
             tourList.DeleteTour(tourID);
 
             UpdateTourList(tourList);
-            UpdateTourList_DeleteTour(tourID);
+            //UpdateTourList_DeleteTour(tourID);
         }
         public static void ChangeLog(int tourID, TourLog logInfo)
         {
             log.Info("Changing Log: " + logInfo.ID);
-            TourList tourList = GetTourListDb();
+            TourList tourList = GetTourList();
             tourList.ChangeTourLog(tourID, logInfo);
 
             UpdateTourList(tourList);
-            UpdateTourList_ChangeLog(tourID, logInfo);
+            //UpdateTourList_ChangeLog(tourID, logInfo);
         }
         public static void DeleteLog(int tourID, int logID)
         {
             log.Info("Deleting Log: " + logID);
-            TourList tourList = GetTourListDb();
+            TourList tourList = GetTourList();
             tourList.DeleteTourLog(tourID, logID);
 
             UpdateTourList(tourList);
-            UpdateTourList_DeleteLog(tourID, logID);
+            //UpdateTourList_DeleteLog(tourID, logID);
         }
 
         public static bool ExportTour(int currentTourID, string Format)
         {
-            Tour tourToExport = GetTourListDb().getTour(currentTourID);
+            Tour tourToExport = GetTourList().getTour(currentTourID);
             if (tourToExport == null) 
             { 
                 log.Error("Unable to export tour: tour ID not found in Tour List."); 
@@ -210,13 +186,13 @@ namespace BusinessLayer
             {
                 case "tour_report":
                     reportPath = AccessFiles.getExportPath("Generate Report");
-                    Tour reportedTour = GetTourListDb().getTour(CurrentTourID);
-                    return reportedTour.generateReport();
+                    Tour reportedTour = GetTourList().getTour(CurrentTourID);
+                    return reportedTour.generateReport(reportPath);
 
                 case "summarize_report":
                     reportPath = AccessFiles.getExportPath("Generate Report");
-                    TourList tours = GetTourListDb();
-                    return tours.generateReport();
+                    TourList tours = GetTourList();
+                    return tours.generateReport(reportPath);
             }
 
             return false;

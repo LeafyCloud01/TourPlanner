@@ -20,7 +20,7 @@ namespace PresentationLayer.ViewModels
 
         public GenerateReportViewModel()
         {
-            TourList currentTours = BusinessManager.GetTourListDb();
+            TourList currentTours = BusinessManager.GetTourList();
             CurrentTourID = (currentTours.tours.Count > 0) ? currentTours.tours[0].ID : -1;
 
             CreateGenerateReport();

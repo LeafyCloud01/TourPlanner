@@ -12,9 +12,10 @@ using System.Xml.Linq;
 
 namespace PresentationLayer.ViewModels
 {
+    public enum TransportTypes { Walking, Bicycle, Vehicle };
     public class TourInputsViewModel : INotifyPropertyChanged
     {
-        public static Tour _TourInfo = (BusinessManager.GetTourListDb().tours.Count > 0) ? BusinessManager.GetTourListDb().tours[0] : new Tour();
+        public static Tour _TourInfo = (BusinessManager.GetTourList().tours.Count > 0) ? BusinessManager.GetTourList().tours[0] : new Tour();
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
@@ -72,7 +73,7 @@ namespace PresentationLayer.ViewModels
         public void ChangeTourExecute() 
         {
             BusinessManager.ChangeTour(_TourInfo);
-            Messenger.Default.Send<TourList>(BusinessManager.GetTourListDb());
+            Messenger.Default.Send<TourList>(BusinessManager.GetTourList());
             Messenger.Default.Send<string>("default_tabs");
         }
     }

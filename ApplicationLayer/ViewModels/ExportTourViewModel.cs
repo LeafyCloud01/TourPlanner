@@ -19,7 +19,7 @@ namespace PresentationLayer.ViewModels
 
         public ExportTourViewModel()
         {
-            TourList currentTours = BusinessManager.GetTourListDb();
+            TourList currentTours = BusinessManager.GetTourList();
             CurrentTourID = (currentTours.tours.Count > 0) ? currentTours.tours[0].ID : -1;
 
             CreateExportTour();

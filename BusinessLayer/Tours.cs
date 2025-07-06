@@ -1,4 +1,11 @@
 
+using DataAccessDatabase;
+using iText.IO.Image;
+using iText.Kernel.Pdf;
+using iText.Layout;
+using iText.Layout.Element;
+using iText.Layout.Properties;
+using iText.Bouncycastleconnector;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Net;
@@ -16,10 +23,19 @@ namespace BusinessLayer
         {
             tours = [];
         }
-
         public TourList(List<Tour> tours)
         {
             this.tours = tours;
+        }
+
+        public ObservableCollection<Tour> Transform(ObservableCollection<Tour> TourDisplays)
+        {
+            for (int i = 0; i < tours.Count; i++)
+            {
+                TourDisplays.Add(tours[i]);
+            }
+
+            return TourDisplays;
         }
 
         public List<Tour> tours { get; set; }
@@ -72,18 +88,6 @@ namespace BusinessLayer
             tours = matchingTours;
         }
 
-        public ObservableCollection<Tour> GetTours()
-        {
-            var tourDisplays = new ObservableCollection<Tour>();
-
-            for (int i = 0; i < tours.Count; i++)
-            {
-                tourDisplays.Add(tours[i]);
-            }
-
-            return tourDisplays;
-        }
-
         public bool ChangeTourLog(int tourID, TourLog logInfo)
         {
             bool isEdit = false;
@@ -110,9 +114,31 @@ namespace BusinessLayer
             }
         }
 
-        internal bool generateReport()
+        public bool generateReport(string ReportPath)
         {
-            throw new NotImplementedException();
+            var writer = new PdfWriter(ReportPath);
+            var pdf = new PdfDocument(writer);
+            var document = new Document(pdf);
+
+            Table t1 = new Table(UnitValue.CreatePercentArray(4)).UseAllAvailableWidth();
+
+            t1.AddHeaderCell("Name");
+            t1.AddHeaderCell("Average Time");
+            t1.AddHeaderCell("Average Distance");
+            t1.AddHeaderCell("Average Rating");
+
+            for (int i = 0; i < tours.Count; i++)
+            {
+                t1.AddCell(tours[i].name);
+                t1.AddCell(tours[i].getAverageTime() + "");
+                t1.AddCell(tours[i].getAverageDistance() + "");
+                t1.AddCell(tours[i].getAverageRating() + "");
+            }
+
+            document.Add(t1);
+            document.Close();
+
+            return true;
         }
     }
 
@@ -147,6 +173,43 @@ namespace BusinessLayer
             UpdatePopularity();
             UpdateChildFriendliness();
         }
+        public Tour(DataAccessDatabase.Tour t)
+        {
+            float distance = (t.Distance == null) ? 0 : (float)t.Distance;
+            TimeOnly duration = (t.Duration == null) ? new TimeOnly() : (TimeOnly)t.Duration;
+            if (!Enum.TryParse(t.TransportType, out Transport transport))
+            {
+                transport = Transport.Walking;
+            }
+
+            this.ID = t.TourId;
+            this.name = t.Name ?? "";
+            this.description = t.Description ?? "";
+            this.from = t.FromCoord;
+            this.to = t.ToCoord;
+            this.transportType = transport;
+            this.tourDistance = distance;
+            this.estimatedTime = duration;
+            this.routeInformation = t.Information ?? "";
+            this.logs = new();
+
+            UpdatePopularity();
+            UpdateChildFriendliness();
+        }
+
+        public DataAccessDatabase.Tour Transform(DataAccessDatabase.Tour DbTour)
+        {
+            DbTour.TourId = this.ID;
+            DbTour.Name = this.name;
+            DbTour.Description = this.description;
+            DbTour.FromCoord = this.from;
+            DbTour.ToCoord = this.to;
+            DbTour.TransportType = this.TransportType;
+            DbTour.Distance = this.tourDistance;
+            DbTour.Duration = this.estimatedTime;
+            DbTour.Information = this.routeInformation;
+            return DbTour;
+        }
 
         public int ID { get; set; }
         public string name { get; set; }
@@ -155,7 +218,7 @@ namespace BusinessLayer
         public string to { get; set; }
         public Transport transportType { get; set; }
         public float tourDistance { get; set; }
-        public TimeOnly estimatedTime { get; set; }
+        [JsonIgnore] public TimeOnly estimatedTime { get; set; }
         public string routeInformation { get; set; }
 
         public LogList logs;
@@ -181,9 +244,42 @@ namespace BusinessLayer
         public void UpdateChildFriendliness()
         {
             float difficulty = logs.CalculateDifficulty();
-            float timeAverage = logs.CalculateAverageTimes();
 
-            childFriendliness = 0; // add calculation using difficulty, timeAverage & tourDistance
+            childFriendliness = 0; // add calculation using difficulty, EstimatedTime & tourDistance
+        }
+
+        public TimeSpan getAverageTime()
+        {
+            TimeSpan averageTime = TimeSpan.Zero;
+
+            for (int i = 0; i < logs.logs.Count; i++)
+            {
+                averageTime.Add(logs.logs[i].totalTime.ToTimeSpan());
+            }
+
+            return averageTime / logs.logs.Count;
+        }
+        public float getAverageRating()
+        {
+            float averageRating = 0;
+
+            for (int i = 0; i < logs.logs.Count; i++)
+            {
+                averageRating += logs.logs[i].Rating;
+            }
+
+            return averageRating / logs.logs.Count;
+        }
+        public float getAverageDistance()
+        {
+            float averageDistance = 0;
+
+            for (int i = 0; i < logs.logs.Count; i++)
+            {
+                averageDistance += logs.logs[i].totalDistance;
+            }
+
+            return averageDistance / logs.logs.Count;
         }
 
         public bool includesMatch(string Search)
@@ -199,7 +295,7 @@ namespace BusinessLayer
 
             // number search values
             if (Search.Contains("" + tourDistance)) { return true; }
-            if (Search.Contains("" + estimatedTime.TimeSum())) { return true; }
+            if (Search.Contains("" + estimatedTime.ToTimeSpan())) { return true; }
             if (Search.Contains("" + popularity)) { return true; }
             if (Search.Contains("" + childFriendliness)) { return true; }
 
@@ -209,9 +305,36 @@ namespace BusinessLayer
             return false;
         }
 
-        internal bool generateReport()
+        public bool generateReport(string ReportPath)
         {
-            throw new NotImplementedException();
+            var writer = new PdfWriter(ReportPath);
+            var pdf = new PdfDocument(writer);
+            var document = new Document(pdf);
+
+            Paragraph p1 = new Paragraph(this.name).SetFontSize(18);
+
+            Paragraph p2 = new Paragraph(this.description).SetFontSize(12);
+
+            ImageData i1 = ImageDataFactory.Create(routeInformation);
+
+            Paragraph p3 = new Paragraph("From: " + this.from).SetFontSize(12);
+            Paragraph p4 = new Paragraph("To: " + this.to).SetFontSize(12);
+            Paragraph p5 = new Paragraph("Transport Type: " + this.transportType.ToString()).SetFontSize(12);
+            Paragraph p6 = new Paragraph("Distance: " + this.tourDistance).SetFontSize(12);
+            Paragraph p7 = new Paragraph("Estimated Time: " + this.estimatedTime).SetFontSize(12);
+            Paragraph p8 = new Paragraph("Popularity: " + this.popularity).SetFontSize(12);
+            Paragraph p9 = new Paragraph("Child Friendliness: " + this.childFriendliness).SetFontSize(12);
+
+            document
+                .Add(p1).Add(p2)
+                .Add(new Image(i1))
+                .Add(p3).Add(p4).Add(p5).Add(p6).Add(p7).Add(p8).Add(p9);
+
+            //get log info
+
+            document.Close();
+
+            return true;
         }
     }
 
@@ -252,17 +375,6 @@ namespace BusinessLayer
             if(exists != -1) { logs.RemoveAt(exists); }
         }
 
-        public float CalculateAverageTimes() 
-        {
-            float avgTimes = 0;
-
-            for (int i = 0; i < logs.Count; i++)
-            {
-                avgTimes += logs[i].totalTime.TimeSum();
-            }
-
-            return avgTimes;
-        } 
         public float CalculateDifficulty() 
         {
             float difficulty = 0;
@@ -319,6 +431,32 @@ namespace BusinessLayer
             this.totalTime = totalTime;
             this.rating = rating;
         }
+        public TourLog(DataAccessDatabase.Log l)
+        {
+            TimeOnly totaltime = (l.TotalTime == null) ? new TimeOnly() : (TimeOnly)l.TotalTime;
+            int rating = (l.Rating == null) ? 0 : (int)l.Rating;
+
+            this.ID = l.LogId;
+            this.dateTime = l.DateCreated;
+            this.comment = l.Comment ?? "";
+            this.difficulty = l.Difficulty;
+            this.totalDistance = l.TotalDistance;
+            this.totalTime = totaltime;
+            this.rating = rating;
+        }
+
+        public DataAccessDatabase.Log Transform(DataAccessDatabase.Log DbLog, int TourID)
+        {
+            DbLog.LogId = this.ID;
+            DbLog.DateCreated = this.dateTime;
+            DbLog.Comment = this.comment;
+            DbLog.Difficulty = (int)this.difficulty;
+            DbLog.TotalDistance = this.totalDistance;
+            DbLog.TotalTime = this.totalTime;
+            DbLog.Rating = (int)this.Rating;
+            DbLog.Tour = TourID;
+            return DbLog;
+        }
 
         public int ID {  get; set; }
         public DateTime dateTime { get; set; }
@@ -334,7 +472,7 @@ namespace BusinessLayer
         [JsonIgnore] public string Comment { get { return comment; } }
         [JsonIgnore] public float Difficulty { get { return difficulty; } }
         [JsonIgnore] public float TotalDistance { get { return totalDistance; } }
-        [JsonIgnore] public string TotalTime { get { return totalTime.TimeSum().ToString(); } }
+        [JsonIgnore] public string TotalTime { get { return totalTime.ToTimeSpan().ToString(); } }
         [JsonIgnore] public float Rating { get { return rating; } }
 
         public bool includesMatch(string Search)
@@ -346,37 +484,12 @@ namespace BusinessLayer
 
             // number search values
             if (Search.Contains("" + Date)) { return true; }
-            if (Search.Contains("" + totalTime.TimeSum())) { return true; }
+            if (Search.Contains("" + totalTime.ToTimeSpan())) { return true; }
             if (Search.Contains("" + totalDistance)) { return true; }
             if (Search.Contains("" + difficulty)) { return true; }
             if (Search.Contains("" + rating)) { return true; }
 
             return false;
-        }
-    }
-
-    public class Time
-    {
-        public Time()
-        {
-            hours = 0;
-            minutes = 0;
-            seconds = 0;
-        }
-        public Time(int hours, int minutes, int seconds)
-        {
-            this.hours = hours;
-            this.minutes = minutes;
-            this.seconds = seconds;
-        }
-
-        public int hours;
-        public int minutes;
-        public int seconds;
-
-        public float TimeSum()
-        {
-            return hours + (minutes / 10) + (seconds / 100);
         }
     }
 

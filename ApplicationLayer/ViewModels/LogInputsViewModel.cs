@@ -35,10 +35,10 @@ namespace PresentationLayer.ViewModels
         }
         public LogInputsViewModel() 
         {
-            TourList currentTours = BusinessManager.GetTourListDb();
+            TourList currentTours = BusinessManager.GetTourList();
             LogList currentLogs = (currentTours.tours.Count > 0) ? currentTours.tours[0].logs : new LogList(); 
             _LogInfo = (currentLogs.logs.Count > 0) ? currentTours.tours[0].logs.logs[0] : new TourLog();
-            CurrentTour = (currentTours.tours.Count > 0) ? BusinessManager.GetTourListDb().tours[0] : new Tour();
+            CurrentTour = (currentTours.tours.Count > 0) ? BusinessManager.GetTourList().tours[0] : new Tour();
 
             CreateChangeLog();
 
@@ -60,7 +60,7 @@ namespace PresentationLayer.ViewModels
         {
             Tour currentTour = CurrentTour;
             BusinessManager.ChangeLog(CurrentTour.ID, _LogInfo);
-            Messenger.Default.Send<TourList>(BusinessManager.GetTourListDb());
+            Messenger.Default.Send<TourList>(BusinessManager.GetTourList());
             Messenger.Default.Send<Tour>(currentTour);
             Messenger.Default.Send<string>("log_list");
         }
