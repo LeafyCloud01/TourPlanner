@@ -22,17 +22,32 @@ namespace PresentationLayer.ViewModels
 
         public ICommand ChangeLog {  get; set; }
 
-        public TourLog LogInfo
+        public string Comment
         {
-            get => _LogInfo;
-            set
-            {
-                _LogInfo = value;
-
-                // Support TwoWay binding
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(LogInfo)));
-            }
+            get => _LogInfo.comment;
+            set { _LogInfo.comment = value; PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Comment))); }
         }
+        public float Difficulty
+        {
+            get => _LogInfo.difficulty;
+            set { _LogInfo.difficulty = value; PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Difficulty))); }
+        }
+        public float TotalDistance
+        {
+            get => _LogInfo.totalDistance;
+            set { _LogInfo.totalDistance = value; PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TotalDistance))); }
+        }
+        public TimeOnly TotalTime
+        {
+            get => _LogInfo.totalTime;
+            set { _LogInfo.totalTime = value; PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TotalTime))); }
+        }
+        public float Rating
+        {
+            get => _LogInfo.rating;
+            set { _LogInfo.rating = value; PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Rating))); }
+        }
+
         public LogInputsViewModel() 
         {
             TourList currentTours = BusinessManager.GetTourList();
@@ -52,7 +67,11 @@ namespace PresentationLayer.ViewModels
         }
         private void ReceiveCurrentTourLog(TourLog CurrentLog)
         {
-            this.LogInfo = CurrentLog;
+            this.Comment = CurrentLog.comment;
+            this.Difficulty = CurrentLog.difficulty;
+            this.TotalDistance = CurrentLog.totalDistance;
+            this.TotalTime = CurrentLog.totalTime;
+            this.Rating = CurrentLog.rating;
         }
 
         private void CreateChangeLog() { ChangeLog = new RelayCommand(ChangeLogExecute); }

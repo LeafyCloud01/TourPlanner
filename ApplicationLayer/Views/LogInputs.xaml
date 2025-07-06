@@ -15,15 +15,15 @@
         <StackPanel>
 
             <Label>Comment</Label>
-            <TextBox x:Name="LogCommentInput" Text="{Binding LogInfo.comment, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+            <TextBox x:Name="LogCommentInput" Text="{Binding Comment, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
             <Label>Difficulty</Label>
-            <TextBox x:Name="LogDifficultyInput" Text="{Binding LogInfo.difficulty, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+            <TextBox x:Name="LogDifficultyInput" Text="{Binding Difficulty, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
             <Label>Total Distance</Label>
-            <TextBox x:Name="LogDistanceInput" Text="{Binding LogInfo.totalDistance, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+            <TextBox x:Name="LogDistanceInput" Text="{Binding TotalDistance, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
             <Label>Total Time</Label>
-            <TextBox x:Name="LogTotalTimeInput" Text="{Binding LogInfo.totalTime, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+            <TextBox x:Name="LogTotalTimeInput" Text="{Binding TotalTime, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
             <Label>Rating</Label>
-            <TextBox x:Name="LogRatingInput" Text="{Binding LogInfo.rating, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+            <TextBox x:Name="LogRatingInput" Text="{Binding Rating, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
 
 
             <Button x:Name="SubmitLog" Command="{Binding ChangeLog}">Add Log</Button>
