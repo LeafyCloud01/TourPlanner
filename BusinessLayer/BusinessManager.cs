@@ -32,23 +32,22 @@ namespace BusinessLayer
             string toursString = AccessFiles.GetFileContent("Tours.json"); 
             TourList? tourList = JsonSerializer.Deserialize<TourList>(toursString);
 
-            return (tourList != null)? tourList : new TourList();
+            return tourList ?? new TourList();
         }
 
         public static TourList GetTourListDb()
         {
-            TourList tourList = new TourList();
+            TourList tourList = new();
             var Tours = AccessDatabase.GetTours();
             foreach (var t in Tours) 
             {
                 float distance = (t.Distance ==null)? 0 : (float)t.Distance;
                 TimeOnly duration = (t.Duration == null) ? new TimeOnly() : (TimeOnly)t.Duration;
-                string name = (t.Name == null) ? "" : t.Name;
-                string description = (t.Description == null) ? "" : t.Description;
-                string information = (t.Information == null) ? "" : t.Information;
-                Transport transport;
-                Enum.TryParse(t.TransportType, out transport);
-                tourList.ChangeTour(new BusinessLayer.Tour(t.TourId, name, description, t.FromCoord, t.ToCoord, transport, distance, duration, information, new LogList()));
+                if (!Enum.TryParse(t.TransportType, out Transport transport))
+                {
+                    transport = Transport.Walking;
+                }
+                tourList.ChangeTour(new BusinessLayer.Tour(t.TourId, t.Name ?? "", t.Description ?? "", t.FromCoord, t.ToCoord, transport, distance, duration, t.Information ?? "", new LogList()));
             }
             foreach (var tour in tourList.tours)
             {
@@ -59,8 +58,7 @@ namespace BusinessLayer
                     {
                         TimeOnly totaltime = (l.TotalTime == null) ? new TimeOnly() : (TimeOnly)l.TotalTime;
                         int rating = (l.Rating == null) ? 0 : (int)l.Rating;
-                        string comment = (l.Comment == null) ? "" : l.Comment;
-                        tour.logs.ChangeLog(new TourLog(l.LogId, l.DateCreated, comment, l.Difficulty, l.TotalDistance, totaltime, rating));    
+                        tour.logs.ChangeLog(new TourLog(l.LogId, l.DateCreated, l.Comment?? "", l.Difficulty, l.TotalDistance, totaltime, rating));    
                     }
                 }
             }

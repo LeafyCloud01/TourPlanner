@@ -12,6 +12,6 @@
     </UserControl.DataContext>
 
     <Grid>
-        <Image Source="/Views/PlaceholderMap.jpg" Stretch="Fill"></Image>
+        <Image Source="{Binding ImageSource}" Stretch="Fill"></Image>
     </Grid>
 </UserControl>
