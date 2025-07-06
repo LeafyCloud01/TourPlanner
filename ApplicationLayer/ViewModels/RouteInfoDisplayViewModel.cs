@@ -15,10 +15,20 @@ namespace PresentationLayer.ViewModels
         public RouteInfoDisplayViewModel()
         {
             Messenger.Default.Register<Tour>(this, (action) => ReceiveCurrentTour(action));
+            if (CurrentTour.routeInformation == "")
+            {
+                CurrentTour = BusinessManager.GetMapImage(CurrentTour);
+            }
+            ImageSource = CurrentTour.RouteInformation;
         }
         private void ReceiveCurrentTour(Tour CurrentTour)
         {
             this.CurrentTour = CurrentTour;
+            if (CurrentTour.routeInformation == "")
+            {
+                CurrentTour = BusinessManager.GetMapImage(CurrentTour);
+            }
+            ImageSource = CurrentTour.RouteInformation;
         }
     }
 }

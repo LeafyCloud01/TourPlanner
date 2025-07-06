@@ -15,7 +15,7 @@ using System.Xml.Linq;
 
 namespace BusinessLayer
 {
-    public enum Transport { Walking, Bicycle, Vehicle }
+    public enum Transport { Walking, Hiking, Bicycle, Vehicle }
 
     public class TourList
     {
@@ -280,6 +280,26 @@ namespace BusinessLayer
             }
 
             return averageDistance / logs.logs.Count;
+        }
+
+        public List<double> ParseCoordinates()
+        {
+            var coordinates = new List<double>();
+            var temp = this.from.Replace(" ", "");
+            var Coords = temp.Split(',');
+            foreach (var coords in Coords)
+            {
+                var ValOut = double.Parse(coords, System.Globalization.CultureInfo.InvariantCulture);
+                coordinates.Add(ValOut);
+            }
+            temp = this.to.Replace(" ", "");
+            Coords = temp.Split(',');
+            foreach (var coords in Coords)
+            {
+                var ValOut = double.Parse(coords, System.Globalization.CultureInfo.InvariantCulture);
+                coordinates.Add(ValOut);
+            }
+            return coordinates;
         }
 
         public bool includesMatch(string Search)

@@ -1,4 +1,5 @@
-﻿using DataAccessDatabase;
+﻿using DataAccessAPI;
+using DataAccessDatabase;
 using DataAccessFiles;
 using iText.Kernel.Pdf;
 using iText.StyledXmlParser.Jsoup.Nodes;
@@ -14,6 +15,7 @@ using System.Net;
 using System.Reflection;
 using System.Text;
 using System.Text.Json;
+using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
@@ -27,6 +29,25 @@ namespace BusinessLayer
         private static readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         private static string DataAccessType = "File";
+
+        public static Tour GetMapImage(Tour tour)
+        {
+            tour.routeInformation = AccessAPI.GetMapCoords(tour.ParseCoordinates());
+            return tour;
+        }
+
+        public static Tour GetRoute(Tour tour)
+        {
+            var task = AccessAPI.GetRouteData(tour.ParseCoordinates(), (int)tour.transportType);
+            var result = task.Result;
+            var json = JsonNode.Parse(result);
+            if (json != null)
+            {
+                tour.tourDistance = (float)json["routes"]["summary"]["distance"];
+                tour.estimatedTime.Add(TimeSpan.FromSeconds((double)json["routes"]["summary"]["duration"]));
+            }
+            return tour;
+        }
 
         public static TourList GetTourList()
         {
@@ -111,10 +132,12 @@ namespace BusinessLayer
         {
             log.Info("Changing Tour: " + tour.ID);
             TourList tourList = GetTourList();
+            tour = GetMapImage(tour);
+            tour = GetRoute(tour);
             tourList.ChangeTour(tour);
 
             UpdateTourList(tourList);
-            //UpdateTourList_ChangeTour(tour);
+            UpdateTourList_ChangeTour(tour);
         }
         public static void DeleteTour(int tourID)
         {
@@ -123,7 +146,7 @@ namespace BusinessLayer
             tourList.DeleteTour(tourID);
 
             UpdateTourList(tourList);
-            //UpdateTourList_DeleteTour(tourID);
+            UpdateTourList_DeleteTour(tourID);
         }
         public static void ChangeLog(int tourID, TourLog logInfo)
         {
@@ -132,7 +155,7 @@ namespace BusinessLayer
             tourList.ChangeTourLog(tourID, logInfo);
 
             UpdateTourList(tourList);
-            //UpdateTourList_ChangeLog(tourID, logInfo);
+            UpdateTourList_ChangeLog(tourID, logInfo);
         }
         public static void DeleteLog(int tourID, int logID)
         {
@@ -141,7 +164,7 @@ namespace BusinessLayer
             tourList.DeleteTourLog(tourID, logID);
 
             UpdateTourList(tourList);
-            //UpdateTourList_DeleteLog(tourID, logID);
+            UpdateTourList_DeleteLog(tourID, logID);
         }
 
         public static bool ExportTour(int currentTourID, string Format)
