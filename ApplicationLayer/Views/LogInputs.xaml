@@ -15,8 +15,7 @@
         <StackPanel>
 
             <Label>Date/Time</Label>
-            <DatePicker></DatePicker>
-            <TextBox x:Name="LogTimeInput"></TextBox>
+            <DatePicker x:Name="LogTimeInput"></DatePicker>
             <Label>Comment</Label>
             <TextBox x:Name="LogCommentInput" Text="{Binding LogInfo.comment}"></TextBox>
             <Label>Difficulty</Label>

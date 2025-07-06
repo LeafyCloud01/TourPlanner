@@ -238,7 +238,18 @@ namespace BusinessLayer
             TourList? importedTours = AccessFiles.Import<TourList>(Format);
             if (importedTours != null)
             {
-                UpdateTourList(importedTours);
+                switch(DataAccessType)
+                {
+                    case "Db": 
+                        for(int i = 0; i < importedTours.tours.Count; i++)
+                        {
+                            UpdateTourList_ChangeTour(importedTours.tours[i]);
+                        }
+                        break;
+                    case "File":
+                        UpdateTourList(importedTours);
+                        break;
+                }
                 log.Info($"Successfully imported {Format} file");
                 return true;
             }
