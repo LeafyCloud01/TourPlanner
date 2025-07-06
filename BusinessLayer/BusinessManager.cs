@@ -131,8 +131,9 @@ namespace BusinessLayer
 
         public static void ChangeTour(Tour tour)
         {
-            log.Info("Changing Tour: " + tour.ID);
             TourList tourList = GetTourList();
+            if (tour.ID == -1) { tour.ID = tourList.getHighestID() + 1; }
+            log.Info("Changing Tour: " + tour.ID);
             tour = GetMapImage(tour);
             tour = GetRoute(tour);
             tourList.ChangeTour(tour);
@@ -157,8 +158,9 @@ namespace BusinessLayer
         }
         public static void ChangeLog(int tourID, TourLog logInfo)
         {
-            log.Info("Changing Log: " + logInfo.ID);
             TourList tourList = GetTourList();
+            if (logInfo.ID == -1) { logInfo.ID = tourList.getTour(tourID).logs.getHighestID() + 1; }
+            log.Info("Changing Log: " + logInfo.ID);
             tourList.ChangeTourLog(tourID, logInfo);
 
             switch (DataAccessType)

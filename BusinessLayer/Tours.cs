@@ -139,6 +139,16 @@ namespace BusinessLayer
 
             return true;
         }
+
+        public int getHighestID()
+        {
+            int highestID = 0;
+            for (int i = 0; i < tours.Count; i++)
+            {
+                if (tours[i].ID > highestID) { highestID = tours[i].ID; }
+            }
+            return highestID;
+        }
     }
 
     public class Tour
@@ -452,6 +462,16 @@ namespace BusinessLayer
             }
 
             return lr1;
+        }
+
+        public int getHighestID()
+        {
+            int highestID = 0;
+            for (int i = 0; i < logs.Count; i++)
+            {
+                if (logs[i].ID > highestID) { highestID = logs[i].ID; }
+            }
+            return highestID;
         }
     }
     public class TourLog
