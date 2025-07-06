@@ -110,12 +110,6 @@ namespace BusinessUnitTests
             Assert.That(difficulty == 2);
         }
         [Test]
-        public void CalculateAverageTimes()
-        {
-
-            Assert.Fail();
-        }
-        [Test]
         public void PartialSearch()
         {
             bool includesSearchText = log1_new.includesMatch("but");

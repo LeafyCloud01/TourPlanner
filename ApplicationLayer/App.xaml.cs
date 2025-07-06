@@ -3,6 +3,7 @@ using System.Data;
 using System.IO;
 using System.Reflection;
 using System.Windows;
+using GalaSoft.MvvmLight.Messaging;
 using log4net;
 using log4net.Config;
 using PresentationLayer.ViewModels;

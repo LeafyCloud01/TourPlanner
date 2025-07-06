@@ -120,12 +120,11 @@ namespace BusinessLayer
             var pdf = new PdfDocument(writer);
             var document = new Document(pdf);
 
-            Table t1 = new Table(UnitValue.CreatePercentArray(4)).UseAllAvailableWidth();
-
-            t1.AddHeaderCell("Name");
-            t1.AddHeaderCell("Average Time");
-            t1.AddHeaderCell("Average Distance");
-            t1.AddHeaderCell("Average Rating");
+            Table t1 = new Table(4).UseAllAvailableWidth()
+                .AddHeaderCell("Name")
+                .AddHeaderCell("Average Time")
+                .AddHeaderCell("Average Distance")
+                .AddHeaderCell("Average Rating");
 
             for (int i = 0; i < tours.Count; i++)
             {
@@ -245,7 +244,7 @@ namespace BusinessLayer
         {
             float difficulty = logs.CalculateDifficulty();
 
-            childFriendliness = 0; // add calculation using difficulty, EstimatedTime & tourDistance
+            childFriendliness = difficulty + (float)estimatedTime.ToTimeSpan().TotalHours + tourDistance / 100; 
         }
 
         public TimeSpan getAverageTime()
@@ -350,7 +349,9 @@ namespace BusinessLayer
                 //.Add(new Image(i1))
                 .Add(p3).Add(p4).Add(p5).Add(p6).Add(p7).Add(p8).Add(p9);
 
-            //get log info
+            Table logReport = logs.getReport();
+
+            document.Add(logReport);
 
             document.Close();
 
@@ -427,6 +428,30 @@ namespace BusinessLayer
                 if (includes_match) { return true; }
             }
             return false;
+        }
+
+        public Table getReport()
+        {
+            Table lr1 = new Table(6).SetFontSize(12).UseAllAvailableWidth()
+                .AddHeaderCell("Date Created")
+                .AddHeaderCell("Comment")
+                .AddHeaderCell("Difficulty")
+                .AddHeaderCell("Total Distance")
+                .AddHeaderCell("Total Time")
+                .AddHeaderCell("Rating");
+
+
+            for (int i = 0; i < logs.Count; i++)
+            {
+                lr1.AddCell(logs[i].dateTime.ToString());
+                lr1.AddCell(logs[i].Comment);
+                lr1.AddCell(logs[i].difficulty + "");
+                lr1.AddCell(logs[i].totalDistance + "");
+                lr1.AddCell(logs[i].totalTime + "");
+                lr1.AddCell(logs[i].rating + "");
+            }
+
+            return lr1;
         }
     }
     public class TourLog
@@ -512,5 +537,4 @@ namespace BusinessLayer
             return false;
         }
     }
-
 }

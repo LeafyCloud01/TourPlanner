@@ -12,9 +12,18 @@
     </UserControl.DataContext>
 
     <Grid>
-        <StackPanel HorizontalAlignment="Center" Margin="5 25 5 5">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <StackPanel HorizontalAlignment="Center" Margin="5 25 5 5" Grid.Row="0">
             <TextBlock Margin="5 5 5 5" HorizontalAlignment="Center" FontSize="18" FontWeight="Bold">Export Selected Tour</TextBlock>
             <Button Height="40" Width="150" Command="{Binding ExportTour}" CommandParameter="JSON" Margin="5 10 5 5">As JSON</Button>
+        </StackPanel>
+        <StackPanel HorizontalAlignment="Center" Margin="5 25 5 5" Grid.Row="1">
+            <TextBlock Margin="5 5 5 5" HorizontalAlignment="Center" FontSize="18" FontWeight="Bold">Export All Tours</TextBlock>
+            <Button Height="40" Width="150" Command="{Binding ExportTours}" CommandParameter="JSON" Margin="5 10 5 5">As JSON</Button>
         </StackPanel>
     </Grid>
 </UserControl>

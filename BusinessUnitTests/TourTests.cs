@@ -10,15 +10,15 @@ namespace BusinessUnitTests
         }
 
         public TourList tours = new TourList();
-        Tour tour1 = new(0, "tour 1", "description", "", "", new(), 0, new(), "", new());
+        Tour tour1 = new(0, "tour 1", "description", "", "", new(), 147, new(3, 0), "", new());
         Tour tour1_new = new(0, "tour 1", "description", "", "", new(), 0, new(), "", new());
         Tour tour2 = new(1, "tour 2", "baa baa baa", "", "", new(), 0, new(), "", new());
         Tour tour3 = new(2, "tour 3", "a fun description", "", "", new(), 0, new(), "", new());
 
         public LogList logs = new LogList();
-        TourLog log1 = new(0, new(), "", 1, 0, new(), 0);
-        TourLog log2 = new(1, new(), "", 3, 0, new(), 0);
-        TourLog log3 = new(2, new(), "", 2, 0, new(), 0);
+        TourLog log1 = new(0, new(), "", 1, 86f, new(1, 52, 0), 2);
+        TourLog log2 = new(1, new(), "", 3, 14f, new(0, 33, 0), 3);
+        TourLog log3 = new(2, new(), "", 2, 104f, new(2, 15, 0), 2);
 
         [Test]
         public void AddNewTour()
@@ -62,7 +62,32 @@ namespace BusinessUnitTests
         [Test]
         public void UpdateChildFriendliness()
         {
-            Assert.Fail();
+            tour1.logs.logs = [log1, log2, log3];
+            tour1.UpdateChildFriendliness();
+            float childFriendliness = tour1.childFriendliness;
+
+            Assert.That(childFriendliness == 1.56);
+        }
+        public void GetAverageTime()
+        {
+            tour1.logs.logs = [log1, log2, log3];
+            TimeSpan avgTime = tour1.getAverageTime();
+
+            Assert.That(avgTime == new TimeSpan(3, 1, 1));
+        }
+        public void GetAverageDistance()
+        {
+            tour1.logs.logs = [log1, log2, log3];
+            float avgDistance = tour1.getAverageDistance();
+
+            Assert.That(avgDistance == 68);
+        }
+        public void GetAverageRating()
+        {
+            tour1.logs.logs = [log1, log2, log3];
+            float avgRating = tour1.getAverageRating();
+
+            Assert.That(avgRating == 7/3);
         }
         [Test]
         public void GetTour()

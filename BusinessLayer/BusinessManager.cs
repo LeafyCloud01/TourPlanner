@@ -33,7 +33,7 @@ namespace BusinessLayer
 
         public static Tour GetMapImage(Tour tour)
         {
-            tour.routeInformation = AccessAPI.GetMapCoords(tour.ParseCoordinates());
+            //tour.routeInformation = AccessAPI.GetMapCoords(tour.ParseCoordinates());
             return tour;
         }
 
@@ -137,8 +137,11 @@ namespace BusinessLayer
             tour = GetRoute(tour);
             tourList.ChangeTour(tour);
 
-            UpdateTourList(tourList);
-            UpdateTourList_ChangeTour(tour);
+            switch (DataAccessType)
+            {
+                case "Db": UpdateTourList_ChangeTour(tour); break;
+                case "File": UpdateTourList(tourList); break;
+            }
         }
         public static void DeleteTour(int tourID)
         {
@@ -146,8 +149,11 @@ namespace BusinessLayer
             TourList tourList = GetTourList();
             tourList.DeleteTour(tourID);
 
-            UpdateTourList(tourList);
-            UpdateTourList_DeleteTour(tourID);
+            switch (DataAccessType)
+            {
+                case "Db": UpdateTourList_DeleteTour(tourID); break;
+                case "File": UpdateTourList(tourList); break;
+            }
         }
         public static void ChangeLog(int tourID, TourLog logInfo)
         {
@@ -155,8 +161,11 @@ namespace BusinessLayer
             TourList tourList = GetTourList();
             tourList.ChangeTourLog(tourID, logInfo);
 
-            UpdateTourList(tourList);
-            UpdateTourList_ChangeLog(tourID, logInfo);
+            switch (DataAccessType)
+            {
+                case "Db": UpdateTourList_ChangeLog(tourID, logInfo); break;
+                case "File": UpdateTourList(tourList); break;
+            }
         }
         public static void DeleteLog(int tourID, int logID)
         {
@@ -164,13 +173,16 @@ namespace BusinessLayer
             TourList tourList = GetTourList();
             tourList.DeleteTourLog(tourID, logID);
 
-            UpdateTourList(tourList);
-            UpdateTourList_DeleteLog(tourID, logID);
+            switch (DataAccessType)
+            {
+                case "Db": UpdateTourList_DeleteLog(tourID, logID); break;
+                case "File": UpdateTourList(tourList); break;
+            }
         }
 
         public static bool ExportTour(int currentTourID, string Format)
         {
-            Tour tourToExport = GetTourList().getTour(currentTourID);
+            Tour? tourToExport = GetTourList().getTour(currentTourID);
             if (tourToExport == null) 
             { 
                 log.Error("Unable to export tour: tour ID not found in Tour List."); 
@@ -180,11 +192,29 @@ namespace BusinessLayer
             {
                 bool success = AccessFiles.Export<Tour>(Format, tourToExport);
                 
-                if(success == true) { log.Info("Successfully Imported JSON File"); }
-                else { log.Info("Unable to export JSON File. An error occured during Exporting."); }
+                if(success == true) { log.Info($"Successfully exported {Format} file"); }
+                else { log.Info($"Unable to export {Format} File. An error occured during exporting."); }
 
                 return success;
             } 
+        }
+        public static bool ExportTours(string Format)
+        {
+            TourList toursToExport = GetTourList();
+            if (toursToExport == null)
+            {
+                log.Error("Unable to export tours: Tour list is empty.");
+                return false;
+            }
+            else
+            {
+                bool success = AccessFiles.Export<TourList>(Format, toursToExport);
+
+                if (success == true) { log.Info($"Successfully exported {Format} file"); }
+                else { log.Info($"Unable to export {Format} File. An error occured during exporting."); }
+
+                return success;
+            }
         }
 
         public static bool ImportTour(string Format)
@@ -193,11 +223,26 @@ namespace BusinessLayer
             if(importedTour != null) 
             { 
                 ChangeTour(importedTour);
-                log.Info("Successfully Imported JSON File");
+                log.Info($"Successfully imported {Format} file");
                 return true;
             }
             else { 
-                log.Error("Error Importing JSON. Tour received is null.");
+                log.Error($"Error importing {Format}. Tour received is null.");
+                return false;
+            }
+        }
+        public static bool ImportTours(string Format)
+        {
+            TourList? importedTours = AccessFiles.Import<TourList>(Format);
+            if (importedTours != null)
+            {
+                UpdateTourList(importedTours);
+                log.Info($"Successfully imported {Format} file");
+                return true;
+            }
+            else
+            {
+                log.Error($"Error importing {Format}. Tour list received is null.");
                 return false;
             }
         }
@@ -209,12 +254,12 @@ namespace BusinessLayer
             switch (Type)
             {
                 case "tour_report":
-                    reportPath = AccessFiles.getExportPath("Generate Report") + ".pdf";
+                    reportPath = AccessFiles.getExportPath("Generate Report", "pdf");
                     Tour reportedTour = GetTourList().getTour(CurrentTourID);
                     return reportedTour.generateReport(reportPath);
 
                 case "summarize_report":
-                    reportPath = AccessFiles.getExportPath("Generate Report") + ".pdf";
+                    reportPath = AccessFiles.getExportPath("Generate Report", "pdf");
                     TourList tours = GetTourList();
                     return tours.generateReport(reportPath);
             }

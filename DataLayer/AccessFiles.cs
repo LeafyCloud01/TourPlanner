@@ -94,7 +94,7 @@ namespace DataAccessFiles
             return false;
         }
 
-        public static string getExportPath(string title)
+        public static string getExportPath(string title, string Extension = "")
         {
             SaveFileDialog exportDialog = new SaveFileDialog
             {
@@ -102,7 +102,7 @@ namespace DataAccessFiles
                 OverwritePrompt = true
             };
 
-            if (exportDialog.ShowDialog() == true) { return exportDialog.FileName; }
+            if (exportDialog.ShowDialog() == true) { return (Extension != "") ? exportDialog.FileName + "." + Extension : exportDialog.FileName; }
             else { return ""; }
         }
     }
