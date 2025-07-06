@@ -14,8 +14,6 @@
     <ScrollViewer>
         <StackPanel>
 
-            <Label>Date/Time</Label>
-            <DatePicker x:Name="LogTimeInput" DisplayDate="{Binding LogInfo.Time}"></DatePicker>
             <Label>Comment</Label>
             <TextBox x:Name="LogCommentInput" Text="{Binding LogInfo.comment, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
             <Label>Difficulty</Label>
