@@ -13,6 +13,7 @@
   </ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\DataAccessAPI\DataAccessAPI.csproj" />
 		<ProjectReference Include="..\DataLayer\DataAccessFiles.csproj" />
 		<ProjectReference Include="..\DataAccessDatabase\DataAccessDatabase.csproj" />
 	</ItemGroup>
