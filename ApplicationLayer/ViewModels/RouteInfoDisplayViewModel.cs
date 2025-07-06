@@ -15,6 +15,7 @@ namespace PresentationLayer.ViewModels
         public RouteInfoDisplayViewModel()
         {
             Messenger.Default.Register<Tour>(this, (action) => ReceiveCurrentTour(action));
+            ImageSource = CurrentTour.RouteInformation;
         }
         private void ReceiveCurrentTour(Tour CurrentTour)
         {
