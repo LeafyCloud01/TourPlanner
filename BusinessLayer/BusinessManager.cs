@@ -8,6 +8,7 @@ using log4net.Config;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data.Common;
 using System.IO;
 using System.Linq;
@@ -28,7 +29,7 @@ namespace BusinessLayer
     {
         private static readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
-        private static string DataAccessType = "File";
+        private static string DataAccessType = ConfigurationManager.AppSettings["DataAccessType"];
 
         public static Tour GetMapImage(Tour tour)
         {
@@ -38,14 +39,14 @@ namespace BusinessLayer
 
         public static Tour GetRoute(Tour tour)
         {
-            var task = AccessAPI.GetRouteData(tour.ParseCoordinates(), (int)tour.transportType);
+            /*var task = AccessAPI.GetRouteData(tour.ParseCoordinates(), (int)tour.transportType);
             var result = task.Result;
             var json = JsonNode.Parse(result);
             if (json != null)
             {
                 tour.tourDistance = (float)json["routes"]["summary"]["distance"];
                 tour.estimatedTime.Add(TimeSpan.FromSeconds((double)json["routes"]["summary"]["duration"]));
-            }
+            }*/
             return tour;
         }
 
@@ -53,7 +54,7 @@ namespace BusinessLayer
         {
             switch (DataAccessType)
             {
-                case "DB":
+                case "Db":
                     return GetTourListDb();
                 case "File":
                     return GetTourListFile();
@@ -208,12 +209,12 @@ namespace BusinessLayer
             switch (Type)
             {
                 case "tour_report":
-                    reportPath = AccessFiles.getExportPath("Generate Report");
+                    reportPath = AccessFiles.getExportPath("Generate Report") + ".pdf";
                     Tour reportedTour = GetTourList().getTour(CurrentTourID);
                     return reportedTour.generateReport(reportPath);
 
                 case "summarize_report":
-                    reportPath = AccessFiles.getExportPath("Generate Report");
+                    reportPath = AccessFiles.getExportPath("Generate Report") + ".pdf";
                     TourList tours = GetTourList();
                     return tours.generateReport(reportPath);
             }

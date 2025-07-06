@@ -45,7 +45,9 @@ namespace PresentationLayer.ViewModels
         private void ReceiveCurrentTourList(TourList CurrentTours)
         {
             Tours = CurrentTours.Transform(new ObservableCollection<Tour>());
-            Messenger.Default.Send<Tour>(CurrentTours.tours[0]);
+            TourList currentTours = BusinessManager.GetTourList();
+            Tour CurrentTour = (currentTours.tours.Count > 0) ? currentTours.tours[0] : new Tour();
+            Messenger.Default.Send<Tour>(CurrentTour);
         }
 
         private void CreateShowTour() { ShowTour = new RelayCommand<int>(ShowTourExecute); }

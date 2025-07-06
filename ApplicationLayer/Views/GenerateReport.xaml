@@ -14,7 +14,7 @@
     <Grid>
         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
             <Button Height="40" Width="150" Command="{Binding GenerateReport}" CommandParameter="tour_report" Margin="5 10 5 5">Generate Tour Report</Button>
-            <Button Height="40" Width="150" Command="{Binding GenerateReport}" CommandParameter="summarize_report" Margin="5 10 5 5">Generate Summery Report</Button>
+            <Button Height="40" Width="150" Command="{Binding GenerateReport}" CommandParameter="summarize_report" Margin="5 10 5 5">Generate Summary Report</Button>
         </StackPanel>
     </Grid>
 </UserControl>

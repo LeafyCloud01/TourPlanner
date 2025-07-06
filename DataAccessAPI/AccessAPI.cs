@@ -14,15 +14,14 @@ namespace DataAccessAPI
 
         public static async Task<string> GetRouteData(List<double> Coords, int type)
         {
-            OpenRouteService OpenRouteService = new();
             List<string> transport = ["foot-walking", "foot-hiking", "cycling-regular", "driving-car"];
-            using (var http = new HttpClient { BaseAddress = OpenRouteService.BaseUrl })
+            using (var http = new HttpClient { BaseAddress = new Uri("https://api.openrouteservice.org") })
             {
                 http.DefaultRequestHeaders.Clear();
                 http.DefaultRequestHeaders.TryAddWithoutValidation("accept", "application/json, application/geo+json, application/gpx+xml, img/png; charset=utf-8");
                 http.DefaultRequestHeaders.TryAddWithoutValidation("Content-Type", "application/json; charset=utf-8");
                 http.DefaultRequestHeaders.Authorization =
-                    new AuthenticationHeaderValue("Bearer", $"{OpenRouteService.Key}");
+                    new AuthenticationHeaderValue("Bearer", "yJvcmciOiI1YjNjZTM1OTc4NTExMTAwMDFjZjYyNDgiLCJpZCI6IjdhZDhmMzFmNGJlOTQ4MWRiZDI1MjQzNGI0YjNlNDczIiwiaCI6Im11cm11cjY0In0=");
 
                 using (var content = new StringContent($"{{\"coordinates\":[[{Coords[0]},{Coords[1]}],[{Coords[2]},{Coords[3]}]]}}"))
                 {
@@ -37,9 +36,8 @@ namespace DataAccessAPI
 
         public static string GetMapCoords(List<double> Coords)
         {
-            OpenStreetMap osm = new();
             var result = CalculateMap(Coords, 15);
-            return $"{osm.BaseUrl.ToString}/{result[2]}/{result[0]}/{result[1]}.png";
+            return $"https://tile.openstreetmap.org/{result[2]}/{result[0]}/{result[1]}.png";
         }
 
         private static List<int> CalculateMap(List<double> Coords, int zoom)

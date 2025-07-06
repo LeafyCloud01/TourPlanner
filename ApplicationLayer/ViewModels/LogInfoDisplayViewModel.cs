@@ -45,7 +45,8 @@ namespace PresentationLayer.ViewModels
             CreateAddLog();
             CreateEditLog();
             CreateDeleteLog();
-            CurrentTour = BusinessManager.GetTourList().tours[0];
+            TourList currentTours = BusinessManager.GetTourList();
+            CurrentTour = (currentTours.tours.Count > 0) ? currentTours.tours[0] : new Tour();
         }
 
         private void CreateAddLog() { AddLog = new RelayCommand<string>(AddLogExecute); }

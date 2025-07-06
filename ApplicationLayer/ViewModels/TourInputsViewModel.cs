@@ -12,7 +12,6 @@ using System.Xml.Linq;
 
 namespace PresentationLayer.ViewModels
 {
-    public enum TransportTypes { Walking, Bicycle, Vehicle };
     public class TourInputsViewModel : INotifyPropertyChanged
     {
         public static Tour _TourInfo = (BusinessManager.GetTourList().tours.Count > 0) ? BusinessManager.GetTourList().tours[0] : new Tour();
@@ -21,6 +20,7 @@ namespace PresentationLayer.ViewModels
 
         public event EventHandler<Tour> TourInputsChanged;
 
+        public IEnumerable<string> TransportTypes = ["Walking", "Hiking", "Bicycle", "Vehicle"];
         public ICommand ChangeTour { get; set; }
         
         public string Name

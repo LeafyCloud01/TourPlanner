@@ -1,37 +1,14 @@
 {
   "tours": [
     {
-      "ID": 0,
-      "name": "A Test Tour",
-      "description": "A test description",
-      "from": "Aa",
-      "to": "Bb",
+      "ID": -1,
+      "name": "test 2",
+      "description": "blease",
+      "from": "48.18105747328166, 16.346919675592122",
+      "to": "48.19726031445122, 16.352185544835052",
       "transportType": 0,
       "tourDistance": 0,
-      "estimatedTime": {},
-      "routeInformation": ""
-    },
-    {
-      "ID": 1,
-      "name": "A Tour",
-      "description": "A description",
-      "from": "A",
-      "to": "B",
-      "transportType": 0,
-      "tourDistance": 0,
-      "estimatedTime": {},
-      "routeInformation": ""
-    },
-    {
-      "ID": 2,
-      "name": "An Export and Import Test Tour",
-      "description": "A Tour to test importing and exporting",
-      "from": "I",
-      "to": "E",
-      "transportType": 0,
-      "tourDistance": 0,
-      "estimatedTime": {},
-      "routeInformation": ""
+      "routeInformation": "https://tile.openstreetmap.org/13/5192/3718.png"
     }
   ]
 }

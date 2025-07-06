@@ -11,15 +11,9 @@
     <UserControl.DataContext>
         <local1:TourInputsViewModel/>
     </UserControl.DataContext>
-    <UserControl.Resources>
-        <ObjectDataProvider x:Key="TransportValues" MethodName="GetValues" ObjectType="{x:Type System:Enum}">
-            <ObjectDataProvider.MethodParameters>
-                <x:Type TypeName="local1:TransportTypes"/>
-            </ObjectDataProvider.MethodParameters>
-        </ObjectDataProvider>
-    </UserControl.Resources>
     
-    <ScrollViewer>
+
+        <ScrollViewer>
         <StackPanel>
 
             <Label>Tour Name</Label>
@@ -31,7 +25,7 @@
             <Label>To</Label>
             <TextBox x:Name="TourToInput" Text="{Binding To, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
             <Label>Transport Type</Label>
-            <ComboBox x:Name="TourTransportTypeInput" ItemsSource="{Binding Source={StaticResource TransportValues}}" SelectedItem="{Binding Path=TransportType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></ComboBox>
+            <ComboBox x:Name="TourTransportTypeInput" ItemsSource="{Binding TransportTypes}" SelectedItem="{Binding Path=TransportType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></ComboBox>
             <Label>Distance</Label>
             <Label>Estimated Time</Label>
             <Label>Route Information</Label>

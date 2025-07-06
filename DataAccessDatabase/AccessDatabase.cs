@@ -39,7 +39,7 @@ namespace DataAccessDatabase
         {
             using (var context = new TourPlannerContext())
             {
-               var oldTour = context.Tours.Where(t => t.TourId.Equals(Tour.TourId)).Single();
+               var oldTour = context.Tours.Where(t => t.TourId.Equals(Tour.TourId)).SingleOrDefault();
                 if (oldTour == null)
                 {
                     context.Tours.Add(Tour);
@@ -57,7 +57,7 @@ namespace DataAccessDatabase
         {
             using (var context = new TourPlannerContext())
             {
-                var oldLog = context.Logs.Where(l => l.Tour.Equals(Log.Tour)).Single();
+                var oldLog = context.Logs.Where(l => l.Tour.Equals(Log.Tour)).SingleOrDefault();
                 if (oldLog != null)
                 {
                     context.Logs.Add(Log);
@@ -73,7 +73,7 @@ namespace DataAccessDatabase
         {
             using (var context = new TourPlannerContext())
             {
-                var Tour = context.Tours.Where(t => t.TourId.Equals(TourId)).Single();
+                var Tour = context.Tours.Where(t => t.TourId.Equals(TourId)).SingleOrDefault();
                 if (Tour != null)
                 {
                     var TourLogs = context.Logs.Where(l => l.Tour.Equals(TourId)).ToList();
@@ -91,7 +91,7 @@ namespace DataAccessDatabase
         {
             using (var context = new TourPlannerContext())
             {
-                var Log = context.Logs.Where(l => l.LogId.Equals(LogId)).Single();
+                var Log = context.Logs.Where(l => l.LogId.Equals(LogId)).SingleOrDefault();
                 if (Log != null) 
                 { 
                     context.Logs.Remove(Log); 

@@ -257,7 +257,7 @@ namespace BusinessLayer
                 averageTime.Add(logs.logs[i].totalTime.ToTimeSpan());
             }
 
-            return averageTime / logs.logs.Count;
+            return (logs.logs.Count == 0)? averageTime : averageTime / logs.logs.Count;
         }
         public float getAverageRating()
         {
@@ -268,7 +268,7 @@ namespace BusinessLayer
                 averageRating += logs.logs[i].Rating;
             }
 
-            return averageRating / logs.logs.Count;
+            return (logs.logs.Count == 0) ? averageRating : averageRating / logs.logs.Count;
         }
         public float getAverageDistance()
         {
@@ -279,7 +279,7 @@ namespace BusinessLayer
                 averageDistance += logs.logs[i].totalDistance;
             }
 
-            return averageDistance / logs.logs.Count;
+            return (logs.logs.Count == 0) ? averageDistance : averageDistance / logs.logs.Count;
         }
 
         public List<double> ParseCoordinates()
@@ -289,14 +289,14 @@ namespace BusinessLayer
             var Coords = temp.Split(',');
             foreach (var coords in Coords)
             {
-                var ValOut = double.Parse(coords, System.Globalization.CultureInfo.InvariantCulture);
+                var ValOut = double.Parse(coords);
                 coordinates.Add(ValOut);
             }
             temp = this.to.Replace(" ", "");
             Coords = temp.Split(',');
             foreach (var coords in Coords)
             {
-                var ValOut = double.Parse(coords, System.Globalization.CultureInfo.InvariantCulture);
+                var ValOut = double.Parse(coords);
                 coordinates.Add(ValOut);
             }
             return coordinates;
@@ -335,7 +335,7 @@ namespace BusinessLayer
 
             Paragraph p2 = new Paragraph(this.description).SetFontSize(12);
 
-            ImageData i1 = ImageDataFactory.Create(routeInformation);
+            //ImageData i1 = ImageDataFactory.Create(routeInformation);
 
             Paragraph p3 = new Paragraph("From: " + this.from).SetFontSize(12);
             Paragraph p4 = new Paragraph("To: " + this.to).SetFontSize(12);
@@ -347,7 +347,7 @@ namespace BusinessLayer
 
             document
                 .Add(p1).Add(p2)
-                .Add(new Image(i1))
+                //.Add(new Image(i1))
                 .Add(p3).Add(p4).Add(p5).Add(p6).Add(p7).Add(p8).Add(p9);
 
             //get log info
