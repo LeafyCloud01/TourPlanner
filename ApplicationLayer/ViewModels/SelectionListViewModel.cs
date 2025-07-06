@@ -53,7 +53,8 @@ namespace PresentationLayer.ViewModels
         private void CreateShowTour() { ShowTour = new RelayCommand<int>(ShowTourExecute); }
         public void ShowTourExecute(int Param)
         {
-            Tour tourToSend = _TourList.getTour(Param);
+            TourList currentTours = BusinessManager.GetTourList();
+            Tour tourToSend = currentTours.getTour(Param);
             TourLog logToSend = (tourToSend.logs.logs.Count > 0) ? tourToSend.logs.logs[0] : new TourLog();
 
             Messenger.Default.Send<Tour>(tourToSend);
