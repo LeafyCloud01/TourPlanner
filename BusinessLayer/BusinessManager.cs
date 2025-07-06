@@ -1,4 +1,5 @@
-﻿using DataAccessDatabase;
+﻿using DataAccessAPI;
+using DataAccessDatabase;
 using DataAccessFiles;
 using iText.Kernel.Pdf;
 using iText.StyledXmlParser.Jsoup.Nodes;
@@ -26,6 +27,14 @@ namespace BusinessLayer
     {
         private static readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         
+        public static void GetMapImage(Tour tour)
+        {
+            tour.routeInformation = AccessAPI.GetMapCoords(tour.ParseCoordinates());
+        }
+
+        public static string GetRoute() {
+            return "";
+        }
 
         public static TourList GetTourListFile()
         {

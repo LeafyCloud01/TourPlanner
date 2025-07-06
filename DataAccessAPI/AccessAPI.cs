@@ -33,12 +33,11 @@ namespace DataAccessAPI
             }
         }
 
-        public static List<int> GetMapCoords(double fromlat, double fromlon, double tolat, double tolon)
+        public static string GetMapCoords(List<double> Coords)
         {
-            OpenStreetMap OpenStreetMap = new();
-            List<double> Coords = [fromlat, fromlon, tolat, tolon];
+            OpenStreetMap osm = new();
             var result = CalculateMap(Coords, 15);
-            return result;
+            return $"{osm.BaseUrl.ToString}/{result[2]}/{result[0]}/{result[1]}.png";
         }
 
         private static List<int> CalculateMap(List<double> Coords, int zoom)
