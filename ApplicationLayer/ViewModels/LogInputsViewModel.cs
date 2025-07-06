@@ -27,25 +27,25 @@ namespace PresentationLayer.ViewModels
             get => _LogInfo.comment;
             set { _LogInfo.comment = value; PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Comment))); }
         }
-        public float Difficulty
+        public string Difficulty
         {
-            get => _LogInfo.difficulty;
-            set { _LogInfo.difficulty = value; PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Difficulty))); }
+            get => _LogInfo.difficulty.ToString();
+            set { _LogInfo.difficulty = float.Parse(value); PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Difficulty))); }
         }
-        public float TotalDistance
+        public string TotalDistance
         {
-            get => _LogInfo.totalDistance;
-            set { _LogInfo.totalDistance = value; PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TotalDistance))); }
+            get => _LogInfo.totalDistance.ToString();
+            set { _LogInfo.totalDistance = float.Parse(value); PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TotalDistance))); }
         }
-        public TimeOnly TotalTime
+        public string TotalTime
         {
-            get => _LogInfo.totalTime;
-            set { _LogInfo.totalTime = value; PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TotalTime))); }
+            get => _LogInfo.totalTime.ToShortTimeString();
+            set { _LogInfo.totalTime = TimeOnly.Parse(value); PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TotalTime))); }
         }
-        public float Rating
+        public string Rating
         {
-            get => _LogInfo.rating;
-            set { _LogInfo.rating = value; PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Rating))); }
+            get => _LogInfo.rating.ToString();
+            set { _LogInfo.rating = float.Parse(value); PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Rating))); }
         }
 
         public LogInputsViewModel() 
@@ -68,10 +68,10 @@ namespace PresentationLayer.ViewModels
         private void ReceiveCurrentTourLog(TourLog CurrentLog)
         {
             this.Comment = CurrentLog.comment;
-            this.Difficulty = CurrentLog.difficulty;
-            this.TotalDistance = CurrentLog.totalDistance;
-            this.TotalTime = CurrentLog.totalTime;
-            this.Rating = CurrentLog.rating;
+            this.Difficulty = CurrentLog.difficulty.ToString();
+            this.TotalDistance = CurrentLog.totalDistance.ToString();
+            this.TotalTime = CurrentLog.totalTime.ToShortTimeString();
+            this.Rating = CurrentLog.rating.ToString();
         }
 
         private void CreateChangeLog() { ChangeLog = new RelayCommand(ChangeLogExecute); }

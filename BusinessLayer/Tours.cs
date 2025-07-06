@@ -230,7 +230,7 @@ namespace BusinessLayer
         [JsonIgnore] public TimeOnly estimatedTime { get; set; }
         public string routeInformation { get; set; }
 
-        public LogList logs;
+        public LogList logs { get; set; }
 
         public int popularity = 0;
         public float childFriendliness = 0;

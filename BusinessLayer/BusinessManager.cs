@@ -107,6 +107,7 @@ namespace BusinessLayer
         private static void UpdateTourList(TourList tourList)
         {
             string toursString = JsonSerializer.Serialize<TourList>(tourList, new JsonSerializerOptions { WriteIndented = true });
+            MessageBox.Show(toursString);
             AccessFiles.SetFileContent("Tours.json", toursString);
         }
         private static void UpdateTourList_DeleteTour(int tourID)

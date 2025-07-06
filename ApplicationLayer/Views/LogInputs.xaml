@@ -21,7 +21,7 @@
             <Label>Total Distance</Label>
             <TextBox x:Name="LogDistanceInput" Text="{Binding TotalDistance, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
             <Label>Total Time</Label>
-            <TextBox x:Name="LogTotalTimeInput" Text="{Binding TotalTime, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+            <TextBox x:Name="LogTotalTimeInput" Text="{Binding TotalTime, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"></TextBox>
             <Label>Rating</Label>
             <TextBox x:Name="LogRatingInput" Text="{Binding Rating, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
 
